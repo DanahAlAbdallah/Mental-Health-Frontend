@@ -1,0 +1,41 @@
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import ArticlesPage from "./pages/ArticlesPage";
+import ArticleDetailPage from "./pages/ArticleDetailPage";
+import LoginPage from "./pages/LoginPage";
+import AddArticlePage from "./pages/AddArticlePage";
+import RequireRole from "./components/RequireRole";
+import EditArticlePage from "./pages/EditArticlePage";
+
+function App() {
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<ArticlesPage />} />
+        <Route path="/articles/:id" element={<ArticleDetailPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        {/* ADD NEW ARTICLE BY THERAPIST OR ADMIN */}
+        <Route
+          path="/articles/new"
+          element={
+            <RequireRole allowed={["therapist", "admin"]}>
+              <AddArticlePage />
+            </RequireRole>
+          }
+        />
+        {/* EDIT ARTICLE BY THERAPIST OR ADMIN */}
+        <Route
+          path="/articles/:id/edit"
+          element={
+            <RequireRole allowed={["therapist", "admin"]}>
+              <EditArticlePage />
+            </RequireRole>
+          }
+        />
+      </Routes>
+    </>
+  );
+}
+
+export default App;

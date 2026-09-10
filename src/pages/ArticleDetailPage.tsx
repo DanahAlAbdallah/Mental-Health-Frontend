@@ -1,11 +1,35 @@
-import { useParams, Link } from "react-router-dom";
-import { articles } from "../data/articles";
+import { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { fetchArticleById, deleteArticle } from "../api/articles";
+import type { Article } from "../types";
 
 function ArticleDetailPage() {
   const { id } = useParams();
-  const article = articles.find((a) => a.id === id);
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const [article, setArticle] = useState<Article | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!id) return;
+    fetchArticleById(id).then((data) => {
+      setArticle(data);
+      setLoading(false);
+    });
+  }, [id]);
+
+  async function handleDelete() {
+    if (!article) return;
+    await deleteArticle(article.id);
+    navigate("/");
+  }
+
+  if (loading) {
+    return <div className="p-8">Loading...</div>;
+  }
+
   if (!article) {
     return <div className="p-8">Article not found.</div>;
   }
@@ -30,7 +54,7 @@ function ArticleDetailPage() {
             Edit
           </Link>
           <button
-            onClick={() => console.log("Delete article", article.id)}
+            onClick={handleDelete}
             className="bg-red-500 text-white px-3 py-1 rounded text-sm"
           >
             Delete

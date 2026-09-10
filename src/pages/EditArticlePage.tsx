@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchArticleById } from "../api/articles";
+import { fetchArticleById, updateArticle } from "../api/articles";
 
 function EditArticlePage() {
   const { id } = useParams();
@@ -20,10 +20,15 @@ function EditArticlePage() {
     });
   }, [id]);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log("Updated article:", { id, title, content });
-    // no real save yet — backend comes later
+    if (!id) return;
+    await updateArticle(id, {
+      title,
+      content,
+      author: "Sarah Khalil",
+      category: "General",
+    });
     navigate(`/articles/${id}`);
   }
 

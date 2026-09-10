@@ -12,9 +12,15 @@ function App() {
     <>
       <Navbar />
       <Routes>
+        {/* MAIN ARTICLES PAGE */}
         <Route path="/" element={<ArticlesPage />} />
+
+        {/* ARTICLE DETAIL PAGE */}
         <Route path="/articles/:id" element={<ArticleDetailPage />} />
+
+        {/* LOGIN PAGE */}
         <Route path="/login" element={<LoginPage />} />
+
         {/* ADD NEW ARTICLE BY THERAPIST OR ADMIN */}
         <Route
           path="/articles/new"
@@ -24,6 +30,7 @@ function App() {
             </RequireRole>
           }
         />
+
         {/* EDIT ARTICLE BY THERAPIST OR ADMIN */}
         <Route
           path="/articles/:id/edit"

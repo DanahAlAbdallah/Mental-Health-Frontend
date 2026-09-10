@@ -1,15 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { createArticle } from "../api/articles";
 
 function AddArticlePage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const navigate = useNavigate();
 
-  function handleSubmit(e: React.FormEvent) {
+  // inside the component:
+  const { user } = useAuth();
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log("New article:", { title, content });
-    // no real save yet — backend comes later
+    if (!user) return;
+    await createArticle({
+      title,
+      content,
+      author: user.name,
+      category: "General",
+    });
     navigate("/");
   }
 

@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import AddArticlePage from "./pages/AddArticlePage";
 import RequireRole from "./components/RequireRole";
 import EditArticlePage from "./pages/EditArticlePage";
+import SignupPage from "./pages/SignupPage";
 
 function App() {
   return (
@@ -40,6 +41,9 @@ function App() {
             </RequireRole>
           }
         />
+
+        {/* SIGNUP */}
+        <Route path="/signup" element={<SignupPage />} />
       </Routes>
     </>
   );

@@ -1,45 +1,57 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  type ReactNode,
-} from "react";
-import { mockUsers } from "../data/users";
-import type { User } from "../types";
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import type { User } from '../types';
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => boolean;
+  login: (email: string, password: string) => Promise<boolean>;
+  signup: (name: string, email: string, password: string, role: string) => Promise<boolean>;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const BASE_URL = 'http://localhost:3001/api/auth';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(() => {
-    const stored = localStorage.getItem("user");
+    const stored = localStorage.getItem('user');
     return stored ? JSON.parse(stored) : null;
   });
 
   useEffect(() => {
     if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(user));
     } else {
-      localStorage.removeItem("user");
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
     }
   }, [user]);
 
-  function login(email: string, password: string): boolean {
-    const found = mockUsers.find(
-      (u) => u.email === email && u.password === password,
-    );
-    if (found) {
-      const { password: _pw, ...userWithoutPassword } = found;
-      setUser(userWithoutPassword);
-      return true;
-    }
-    return false;
+  async function login(email: string, password: string): Promise<boolean> {
+    const res = await fetch(`${BASE_URL}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    if (!res.ok) return false;
+
+    const data = await res.json();
+    localStorage.setItem('token', data.token);
+    setUser(data.user);
+    return true;
+  }
+
+  async function signup(name: string, email: string, password: string, role: string): Promise<boolean> {
+    const res = await fetch(`${BASE_URL}/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password, role }),
+    });
+    if (!res.ok) return false;
+
+    const data = await res.json();
+    localStorage.setItem('token', data.token);
+    setUser(data.user);
+    return true;
   }
 
   function logout() {
@@ -47,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );
@@ -55,6 +67,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used within AuthProvider");
+  if (!context) throw new Error('useAuth must be used within AuthProvider');
   return context;
 }

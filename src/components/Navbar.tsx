@@ -30,12 +30,21 @@ function Navbar() {
             </button>
           </>
         ) : (
-          <Link
-            to="/login"
-            className="text-sm bg-blue-600 text-white px-3 py-1 rounded"
-          >
-            Login
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              to="/login"
+              className="text-sm bg-blue-600 text-white px-3 py-1 rounded"
+            >
+              Login
+            </Link>
+
+            <Link
+              to="/signup"
+              className="text-sm bg-gray-200 px-3 py-1 rounded"
+            >
+              SignUp
+            </Link>
+          </div>
         )}
       </div>
     </nav>

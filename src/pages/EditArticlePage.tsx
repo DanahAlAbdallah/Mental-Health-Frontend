@@ -29,7 +29,9 @@ function EditArticlePage() {
       author: "Sarah Khalil",
       category: "General",
     });
-    navigate(`/articles/${id}`);
+    navigate(`/articles/${id}`, {
+      state: { message: "Article updated successfully" },
+    });
   }
 
   if (loading) return <div className="p-8">Loading...</div>;

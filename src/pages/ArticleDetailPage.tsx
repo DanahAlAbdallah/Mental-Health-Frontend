@@ -1,18 +1,22 @@
 import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { fetchArticleById, deleteArticle } from "../api/articles";
 import type { Article } from "../types";
 import ConfirmDialog from "../components/ConfirmDialog";
+import Toast from "../components/Toast";
 
 function ArticleDetailPage() {
   const { id } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [article, setArticle] = useState<Article | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [openDialog, setOpenDialog] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+
   useEffect(() => {
     if (!id) return;
     fetchArticleById(id).then((data) => {
@@ -20,6 +24,15 @@ function ArticleDetailPage() {
       setLoading(false);
     });
   }, [id]);
+
+  useEffect(() => {
+    // <-- new useEffect block, added here
+    const state = location.state as { message?: string } | null;
+    if (state?.message) {
+      setToast(state.message);
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   async function handleDelete() {
     if (!article) return;
@@ -66,10 +79,13 @@ function ArticleDetailPage() {
             onConfirm={() => {
               deleteArticle(article.id);
               setOpenDialog(false);
-              navigate("/",{ state: { message: 'Article deleted successfully' } });
+              navigate("/", {
+                state: { message: "Article deleted successfully" },
+              });
             }}
             onCancel={() => setOpenDialog(false)}
           ></ConfirmDialog>
+          {toast && <Toast message={toast} onClose={() => setToast(null)} />}
         </div>
       )}
     </div>

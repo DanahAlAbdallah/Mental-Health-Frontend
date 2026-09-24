@@ -2,6 +2,14 @@ import type { Article } from "../types";
 
 const BASE_URL = "http://localhost:3001/api/articles";
 
+function getAuthHeaders() {
+  const token = localStorage.getItem("token");
+  return {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+}
+
 export async function fetchArticles(): Promise<Article[]> {
   const res = await fetch(BASE_URL);
   if (!res.ok) throw new Error("Failed to fetch articles");
@@ -22,7 +30,7 @@ export async function createArticle(
 ): Promise<Article> {
   const res = await fetch(BASE_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error("Failed to create article");
@@ -35,7 +43,7 @@ export async function updateArticle(
 ): Promise<Article> {
   const res = await fetch(`${BASE_URL}/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error("Failed to update article");
@@ -43,6 +51,9 @@ export async function updateArticle(
 }
 
 export async function deleteArticle(id: string): Promise<void> {
-  const res = await fetch(`${BASE_URL}/${id}`, { method: "DELETE" });
+  const res = await fetch(`${BASE_URL}/${id}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
   if (!res.ok) throw new Error("Failed to delete article");
 }

@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { fetchArticleById, deleteArticle } from "../api/articles";
 import type { Article } from "../types";
+import ConfirmDialog from "../components/ConfirmDialog";
 
 function ArticleDetailPage() {
   const { id } = useParams();
@@ -11,7 +12,7 @@ function ArticleDetailPage() {
 
   const [article, setArticle] = useState<Article | undefined>(undefined);
   const [loading, setLoading] = useState(true);
-
+  const [openDialog, setOpenDialog] = useState(false);
   useEffect(() => {
     if (!id) return;
     fetchArticleById(id).then((data) => {
@@ -22,8 +23,7 @@ function ArticleDetailPage() {
 
   async function handleDelete() {
     if (!article) return;
-    await deleteArticle(article.id);
-    navigate("/");
+    setOpenDialog(true);
   }
 
   if (loading) {
@@ -59,6 +59,17 @@ function ArticleDetailPage() {
           >
             Delete
           </button>
+          <ConfirmDialog
+            open={openDialog}
+            title={"Delete article"}
+            message={"Are you sure you want to delete this article?"}
+            onConfirm={() => {
+              deleteArticle(article.id);
+              setOpenDialog(false);
+              navigate("/",{ state: { message: 'Article deleted successfully' } });
+            }}
+            onCancel={() => setOpenDialog(false)}
+          ></ConfirmDialog>
         </div>
       )}
     </div>

@@ -13,7 +13,7 @@ function Navbar() {
   return (
     <nav className="bg-white border-b p-4 flex justify-between items-center">
       <Link to="/" className="font-bold">
-        PsychApp
+        Mental health
       </Link>
 
       <div className="flex items-center gap-4">

@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ArticlesPage from "./pages/ArticlesPage";
 import ArticleDetailPage from "./pages/ArticleDetailPage";
@@ -9,9 +9,14 @@ import EditArticlePage from "./pages/EditArticlePage";
 import SignupPage from "./pages/SignupPage";
 
 function App() {
+  const location = useLocation();
+
+  const showNavbar =
+    location.pathname !== "/login" && location.pathname !== "/signup";
+
   return (
     <>
-      <Navbar />
+      {showNavbar && <Navbar />}
       <Routes>
         {/* MAIN ARTICLES PAGE */}
         <Route path="/" element={<ArticlesPage />} />

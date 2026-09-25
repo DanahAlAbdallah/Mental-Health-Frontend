@@ -1,0 +1,21 @@
+:root {
+  --color-primary: #FBBF24;
+  --color-primary-hover: #F59E0B;
+
+  --color-background: #FBF3E4;
+  --color-background-soft: #F0F9FF;
+
+  --color-heading: #2F4B42;
+  --color-text: #4A5751;
+  --color-muted: #6B7A72;
+
+  --color-button-text: #3D2B0F;
+}
+
+
+
+@theme {
+  --color-primary: #FBBF24;
+  --color-primary-hover: #F59E0B;
+  --color-button-text: #3D2B0F;
+}

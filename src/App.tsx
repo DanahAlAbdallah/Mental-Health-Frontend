@@ -7,6 +7,7 @@ import AddArticlePage from "./pages/AddArticlePage";
 import RequireRole from "./components/RequireRole";
 import EditArticlePage from "./pages/EditArticlePage";
 import SignupPage from "./pages/SignupPage";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   const location = useLocation();
@@ -18,8 +19,11 @@ function App() {
     <>
       {showNavbar && <Navbar />}
       <Routes>
+        {/* LANDING PAGE */}
+        <Route path="/" element={<LandingPage />} />
+
         {/* MAIN ARTICLES PAGE */}
-        <Route path="/" element={<ArticlesPage />} />
+        <Route path="/articles" element={<ArticlesPage />} />
 
         {/* ARTICLE DETAIL PAGE */}
         <Route path="/articles/:id" element={<ArticleDetailPage />} />

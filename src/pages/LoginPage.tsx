@@ -59,7 +59,7 @@ function LoginPage() {
         >
           {/* Logo */}
           <div className="text-center mb-5">
-            <h1 className="text-xl font-semibold text-heading">Bloom Again</h1>
+            {/* <h1 className="text-xl font-semibold text-heading">Bloom Again</h1> */}
           </div>
 
           {/* Heading */}

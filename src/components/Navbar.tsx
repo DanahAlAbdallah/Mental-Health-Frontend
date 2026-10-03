@@ -1,8 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    logout();
+    navigate("/");
+  }
 
   return (
     <nav className="flex items-center justify-between px-10 py-5 bg-[#FBF3E4]">
@@ -21,11 +27,16 @@ function Navbar() {
           <Link to="/articles" className="text-[#2F4B42] text-sm font-medium">
             Articles
           </Link>
+          {user.role === "therapist" && (
+            <Link to="/availability" className="text-sm font-medium">
+              My Availability
+            </Link>
+          )}
           <span className="text-sm text-[#6B7A72]">
             {user.name} ({user.role})
           </span>
           <button
-            onClick={logout}
+            onClick={handleLogout}
             className="text-sm bg-gray-200 px-3 py-1 rounded"
           >
             Logout
@@ -50,4 +61,5 @@ function Navbar() {
     </nav>
   );
 }
+
 export default Navbar;

@@ -8,6 +8,7 @@ import RequireRole from "./components/RequireRole";
 import EditArticlePage from "./pages/EditArticlePage";
 import SignupPage from "./pages/SignupPage";
 import LandingPage from "./pages/LandingPage";
+import AvailabilityPage from "./pages/AvailabilityPage";
 
 function App() {
   const location = useLocation();
@@ -53,6 +54,16 @@ function App() {
 
         {/* SIGNUP */}
         <Route path="/signup" element={<SignupPage />} />
+
+        {/* AVAILABILITY */}
+        <Route
+          path="/availability"
+          element={
+            <RequireRole allowed={["therapist"]}>
+              <AvailabilityPage />
+            </RequireRole>
+          }
+        />
       </Routes>
     </>
   );

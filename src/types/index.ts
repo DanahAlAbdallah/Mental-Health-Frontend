@@ -17,3 +17,13 @@ export interface User {
   email: string;
   role: UserRole;
 }
+
+// AVAILABILITY SLOTS
+export interface AvailabilitySlot {
+  id: string;
+  therapistId: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  isBooked: boolean;
+}

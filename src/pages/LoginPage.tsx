@@ -10,18 +10,18 @@ function LoginPage() {
 
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
+    // setLoading(true);
     const success = await login(email, password);
 
     if (success) {
       navigate("/");
     } else {
       setError("Invalid email or password");
-      setLoading(false);
+      // setLoading(false);
     }
   }
 

@@ -1,6 +1,6 @@
 import type { AvailabilitySlot } from "../types";
 
-const BASE_URL = "http://localhost:3001/api/availability";
+const BASE_URL = `${import.meta.env.VITE_API_URL}/api/availability`;
 
 function getAuthHeaders() {
   const token = localStorage.getItem("token");

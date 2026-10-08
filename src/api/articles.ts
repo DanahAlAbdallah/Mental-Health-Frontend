@@ -1,6 +1,6 @@
 import type { Article } from "../types";
 
-const BASE_URL = "http://localhost:3001/api/articles";
+const BASE_URL = `${import.meta.env.VITE_API_URL}/api/articles`;
 
 function getAuthHeaders() {
   const token = localStorage.getItem("token");
@@ -11,13 +11,15 @@ function getAuthHeaders() {
 }
 
 export async function fetchArticles(search?: string): Promise<Article[]> {
-  const url = search ? `${BASE_URL}?search=${encodeURIComponent(search)}` : BASE_URL;
+  const url = search
+    ? `${BASE_URL}?search=${encodeURIComponent(search)}`
+    : BASE_URL;
   const res = await fetch(url);
   if (!res.ok) throw new Error("Failed to fetch articles");
   return res.json();
 }
 
-export async function fetchArticleById( 
+export async function fetchArticleById(
   id: string,
 ): Promise<Article | undefined> {
   const res = await fetch(`${BASE_URL}/${id}`);

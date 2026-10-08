@@ -27,6 +27,9 @@ function Navbar() {
           <Link to="/articles" className="text-[#2F4B42] text-sm font-medium">
             Articles
           </Link>
+          <Link to="/therapists" className="text-[#2F4B42] text-sm font-medium">
+            Therapists
+          </Link>
           {user.role === "therapist" && (
             <Link to="/availability" className="text-sm font-medium">
               My Availability

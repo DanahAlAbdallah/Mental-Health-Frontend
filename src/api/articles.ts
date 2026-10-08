@@ -26,6 +26,16 @@ export async function fetchArticleById(
   return res.json();
 }
 
+export async function fetchLatestArticles(): Promise<Article[]> {
+  const res = await fetch(`${BASE_URL}/latest`);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch latest articles");
+  }
+
+  return res.json();
+}
+
 export async function createArticle(
   data: Omit<Article, "id" | "createdAt">,
 ): Promise<Article> {

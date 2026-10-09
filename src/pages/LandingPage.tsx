@@ -12,7 +12,7 @@ function LandingPage() {
       <Features />
       <ArticlesSection />
       <SplitSection />
-      <ClosingBanner />
+      {/* <ClosingBanner /> */}
       <Footer />
     </div>
   );

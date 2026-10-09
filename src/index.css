@@ -2,11 +2,5 @@
 @import "./styles/colors.css";
 
 body {
-  font-family: 'Poppins', sans-serif;
-}
-
-@theme {
-  --color-primary: #FBBF24;
-  --color-primary-hover: #F59E0B;
-  --color-button-text: #3D2B0F;
+  font-family: "Poppins", sans-serif;
 }

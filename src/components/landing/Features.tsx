@@ -22,24 +22,27 @@ function Features() {
     },
   ];
 
-  return (
-    <section className="bg-[#FBF3E4] px-10 py-20">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-10 max-w-6xl mx-auto text-center">
-        {items.map((item) => (
-          <div key={item.title}>
-            <div className="text-5xl mb-4">{item.icon}</div>
-            <h3
-              style={{ fontFamily: "'Lora', serif" }}
-              className="text-lg text-[#2F4B42] mb-2"
-            >
-              {item.title}
-            </h3>
-            <p className="text-sm text-[#6B7A72]">{item.text}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+
+return (
+  <section className="bg-background px-10 py-20">
+    <div className="mx-auto grid max-w-6xl grid-cols-2 gap-10 text-center md:grid-cols-4">
+      {items.map((item) => (
+        <div key={item.title}>
+          <div className="mb-4 text-5xl">{item.icon}</div>
+
+          <h3
+            style={{ fontFamily: "'Lora', serif" }}
+            className="mb-2 text-lg text-heading"
+          >
+            {item.title}
+          </h3>
+
+          <p className="text-sm text-muted">{item.text}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+);
 }
 
 export default Features;

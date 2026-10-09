@@ -1,10 +1,27 @@
+
 @theme {
-  --color-primary: #FBBF24;
-  --color-primary-hover: #F59E0B;
-  --color-background: #FBF3E4;
-  --color-background-soft: #F0F9FF;
-  --color-heading: #2F4B42;
-  --color-text: #4A5751;
-  --color-muted: #6B7A72;
-  --color-button-text: #3D2B0F;
+  /* Pastel blue — primary actions */
+  --color-primary: #A9CFEF;
+  --color-primary-hover: #86B8E0;
+
+  /* White and soft blue backgrounds */
+  --color-background: #FFFFFF;
+  --color-background-soft: #F0F7FC;
+
+  /* Black text for clear readability */
+  --color-heading: #202124;
+  --color-text: #33363A;
+  --color-muted: #707780;
+
+  /* Button text */
+  --color-button-text: #202124;
+
+  /* Cards and borders */
+  --color-surface: #FFFFFF;
+  --color-border: #DCE7EF;
+
+  /* Optional pastel yellow accents */
+  --color-accent: #F7E6A1;
+  --color-accent-hover: #EED77A;
 }
+

@@ -1,7 +1,7 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
-
+import LOGO from "../assets/LOGO-TRNS.png";
 function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -28,18 +28,16 @@ function Navbar() {
         <Link
           to="/"
           onClick={() => setMenuOpen(false)}
-          className="flex items-center gap-2"
+          className="flex items-center"
         >
-          {/* <span className="text-3xl">🌻</span> */}
-
-          <div>
-            <p className="text-lg font-semibold leading-tight text-heading">
-              Athar-أثر
-            </p>
-            <p className="text-xs text-muted">Your mind matters</p>
+          <div className="h-12 w-36 flex items-center overflow-hidden">
+            <img
+              src={LOGO}
+              alt="Athar Logo"
+              className="h-24 w-30 max-w-none object-contain -ml-2"
+            />
           </div>
         </Link>
-
         {/* Desktop Navigation */}
         <div className="hidden items-center gap-6 md:flex">
           <NavLink to="/articles" className={navLinkClass}>

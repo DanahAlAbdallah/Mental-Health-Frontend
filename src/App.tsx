@@ -11,6 +11,7 @@ import LandingPage from "./pages/LandingPage";
 import AvailabilityPage from "./pages/AvailabilityPage";
 import TherapistsPage from "./pages/TherapistsPage";
 import TherapistDetailPage from "./pages/TherapistDetailPage";
+import TherapistSessionsPage from "./pages/TherapistSessionsPage";
 
 function App() {
   const location = useLocation();
@@ -65,6 +66,16 @@ function App() {
           element={
             <RequireRole allowed={["therapist"]}>
               <AvailabilityPage />
+            </RequireRole>
+          }
+        />
+
+        {/* THERAPIST SESSIONS */}
+        <Route
+          path="/my-sessions"
+          element={
+            <RequireRole allowed={["therapist"]}>
+              <TherapistSessionsPage />
             </RequireRole>
           }
         />

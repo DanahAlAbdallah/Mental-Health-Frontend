@@ -1,7 +1,15 @@
+import meditationGif from "../../assets/mental-illustration.gif";
+
 function SplitSection() {
   return (
     <section className="bg-background-soft px-10 py-20 grid md:grid-cols-2 gap-12 items-center">
-      <div className="flex justify-center text-9xl">🧘</div>
+      <div className="flex justify-center">
+        <img
+          src={meditationGif}
+          alt="Person meditating"
+          className="h-32 w-32 object-contain"
+        />
+      </div>
       <div>
         <p className="text-xs tracking-widest font-semibold text-muted mb-3">
           YOU'RE NOT ALONE

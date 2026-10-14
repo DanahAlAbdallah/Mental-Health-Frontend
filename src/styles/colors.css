@@ -1,7 +1,36 @@
 
+
+:root {
+  /* Primary — calm and welcoming blue */
+  --color-primary: #6ab4f0;
+  --color-primary-hover: #477FA8;
+
+  /* Backgrounds — clean and airy */
+  --color-background: #F8F9FC;
+  --color-background-soft: #EAF3FA;
+
+  /* Text — strong contrast and readability */
+  --color-heading: #202A35;
+  --color-text: #394653;
+  --color-muted: #788694;
+
+  /* Button text */
+  --color-button-text: #202A35;
+
+  /* Cards and borders */
+  --color-surface: #FFFFFF;
+  --color-border: #DCE6EF;
+
+  /* Yellow — sunshine accents */
+  --color-accent: #FBE85A;
+  --color-accent-hover: #F0D638;
+}
+
+
+
 @theme {
   /* Pastel blue — primary actions */
-  --color-primary: #A9CFEF;
+  --color-primary: #5ea6e1;
   --color-primary-hover: #86B8E0;
 
   /* White and soft blue backgrounds */

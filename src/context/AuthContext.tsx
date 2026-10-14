@@ -9,6 +9,7 @@ import type { User } from "../types";
 
 interface AuthContextType {
   user: User | null;
+  token: string | null;
   login: (email: string, password: string) => Promise<boolean>;
   signup: (
     name: string,
@@ -27,6 +28,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const stored = localStorage.getItem("user");
     return stored ? JSON.parse(stored) : null;
   });
+
+  const [token, setToken] = useState<string | null>(() =>
+    localStorage.getItem("token"),
+  );
 
   useEffect(() => {
     if (user) {
@@ -47,6 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const data = await res.json();
     localStorage.setItem("token", data.token);
+    setToken(data.token);
     setUser(data.user);
     return true;
   }
@@ -66,16 +72,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const data = await res.json();
     localStorage.setItem("token", data.token);
+    setToken(data.token);
     setUser(data.user);
     return true;
   }
 
   function logout() {
-    setUser(null);
+      setUser(null);
+  setToken(null);
+  localStorage.removeItem("token");
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout }}>
+    <AuthContext.Provider value={{ user,token, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );

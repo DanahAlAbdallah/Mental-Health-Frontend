@@ -5,9 +5,9 @@ function Footer() {
       <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-4">
         <div>
           <div className="mb-3 flex items-center gap-2">
-            <span className="text-2xl">🌻</span>
+            {/* <span className="text-2xl">🌻</span> */}
             <span className="font-semibold text-heading">
-              Bloom Again
+              Athar - اثر
             </span>
           </div>
 

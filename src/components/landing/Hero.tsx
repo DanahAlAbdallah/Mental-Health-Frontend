@@ -1,5 +1,5 @@
 import sunflowerImage from "../../assets/sunflower.jpg";
-
+  import yellowLineVideo from "../../assets/yellow_line_loop.webm";
 function Hero() {
   return (
     <section className="grid items-center gap-10 bg-background-soft px-10 py-20 md:grid-cols-2">
@@ -27,13 +27,19 @@ function Hero() {
         </button>
       </div>
 
-      <div className="flex justify-center">
-        <img
-          src={sunflowerImage}
-          alt="Sunflowers in bloom"
-          className="w-full max-w-md rounded-2xl object-cover"
-        />
-      </div>
+   
+
+<div className="flex justify-center">
+  <video
+    src={yellowLineVideo}
+    autoPlay
+    loop
+    muted
+    playsInline
+    aria-label="Animated yellow line"
+    className="w-full max-w-md object-contain"
+  />
+</div>
     </section>
   );
 }

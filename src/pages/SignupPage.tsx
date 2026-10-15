@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import backgroundImage from "../assets/back.png";
+import yellowLineVideo from "../assets/yellow_line_loop.webm";
 
 function SignupPage() {
   const [name, setName] = useState("");
@@ -31,40 +31,35 @@ function SignupPage() {
   }
 
   return (
-    <main
-      className="
-        h-screen
-        overflow-hidden
-        bg-cover
-        bg-center
-        bg-no-repeat
-        flex
-        items-center
-        justify-center
-        px-4
-      "
-      style={{ backgroundImage: `url(${backgroundImage})` }}
-    >
-      {/* Background overlay */}
-      <div className="fixed inset-0 bg-heading/30" />
+    <main className="relative min-h-screen overflow-hidden bg-[#EAF2F9] flex items-center justify-center px-4 py-8">
+      {/* Animated line - left */}
+      <video
+        src={yellowLineVideo}
+        autoPlay
+        loop
+        muted
+        playsInline
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-40 top-1/2 -translate-y-1/2 w-[900px] max-w-none opacity-40"
+      />
+
+      {/* Animated line - right (mirrored) */}
+      <video
+        src={yellowLineVideo}
+        autoPlay
+        loop
+        muted
+        playsInline
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-64 top-1/2 -translate-y-1/2 -scale-x-100 w-[900px] max-w-none opacity-40 hidden md:block"
+      />
 
       {/* Signup card */}
       <div className="relative z-10 w-full max-w-md">
-        <div
-          className="
-            bg-white/95
-            backdrop-blur-sm
-            rounded-3xl
-            shadow-2xl
-            px-6
-            py-7
-            sm:px-9
-            sm:py-8
-          "
-        >
+        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl px-6 py-7 sm:px-9 sm:py-8">
           {/* Logo */}
           <div className="text-center mb-5">
-            <h1 className="text-xl font-semibold text-heading">Bloom Again</h1>
+            <h1 className="text-xl font-semibold text-heading">EUPHORIA</h1>
           </div>
 
           {/* Heading */}
@@ -77,19 +72,7 @@ function SignupPage() {
 
           {/* Error */}
           {error && (
-            <div
-              className="
-                mb-4
-                rounded-xl
-                bg-red-50
-                border
-                border-red-100
-                px-4
-                py-2.5
-                text-sm
-                text-red-600
-              "
-            >
+            <div className="mb-4 rounded-xl bg-red-50 border border-red-100 px-4 py-2.5 text-sm text-red-600">
               {error}
             </div>
           )}
@@ -104,7 +87,6 @@ function SignupPage() {
               >
                 Full name
               </label>
-
               <input
                 id="name"
                 type="text"
@@ -112,23 +94,7 @@ function SignupPage() {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name"
                 required
-                className="
-                  w-full
-                  rounded-xl
-                  border border-gray-200
-                  bg-gray-50
-                  px-4
-                  py-3
-                  text-sm
-                  text-heading
-                  placeholder:text-muted
-                  outline-none
-                  transition
-                  focus:bg-white
-                  focus:border-primary
-                  focus:ring-4
-                  focus:ring-primary/10
-                "
+                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-heading placeholder:text-muted outline-none transition focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10"
               />
             </div>
 
@@ -140,7 +106,6 @@ function SignupPage() {
               >
                 Email address
               </label>
-
               <input
                 id="email"
                 type="email"
@@ -148,23 +113,7 @@ function SignupPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                className="
-                  w-full
-                  rounded-xl
-                  border border-gray-200
-                  bg-gray-50
-                  px-4
-                  py-3
-                  text-sm
-                  text-heading
-                  placeholder:text-muted
-                  outline-none
-                  transition
-                  focus:bg-white
-                  focus:border-primary
-                  focus:ring-4
-                  focus:ring-primary/10
-                "
+                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-heading placeholder:text-muted outline-none transition focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10"
               />
             </div>
 
@@ -176,7 +125,6 @@ function SignupPage() {
               >
                 Password
               </label>
-
               <input
                 id="password"
                 type="password"
@@ -184,23 +132,7 @@ function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Create a password"
                 required
-                className="
-                  w-full
-                  rounded-xl
-                  border border-gray-200
-                  bg-gray-50
-                  px-4
-                  py-3
-                  text-sm
-                  text-heading
-                  placeholder:text-muted
-                  outline-none
-                  transition
-                  focus:bg-white
-                  focus:border-primary
-                  focus:ring-4
-                  focus:ring-primary/10
-                "
+                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-heading placeholder:text-muted outline-none transition focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10"
               />
             </div>
 
@@ -212,28 +144,11 @@ function SignupPage() {
               >
                 I am a
               </label>
-
               <select
                 id="role"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="
-                  w-full
-                  rounded-xl
-                  border border-gray-200
-                  bg-gray-50
-                  px-4
-                  py-3
-                  text-sm
-                  text-heading
-                  outline-none
-                  transition
-                  focus:bg-white
-                  focus:border-primary
-                  focus:ring-4
-                  focus:ring-primary/10
-                  cursor-pointer
-                "
+                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-heading outline-none transition focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 cursor-pointer"
               >
                 <option value="client">Client</option>
                 <option value="therapist">Therapist</option>
@@ -244,40 +159,11 @@ function SignupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="
-                w-full
-                rounded-xl
-                cursor-pointer
-                bg-primary
-                hover:bg-primary-hover
-                text-button-text
-                font-semibold
-                py-3
-                transition
-                duration-200
-                hover:-translate-y-0.5
-                shadow-sm
-                disabled:opacity-70
-                disabled:cursor-not-allowed
-                flex
-                items-center
-                justify-center
-                gap-2
-              "
+              className="w-full rounded-xl cursor-pointer bg-primary hover:bg-primary-hover text-button-text font-semibold py-3 transition duration-200 hover:-translate-y-0.5 shadow-sm disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
-                  <span
-                    className="
-                      w-4
-                      h-4
-                      border-2
-                      border-button-text/30
-                      border-t-button-text
-                      rounded-full
-                      animate-spin
-                    "
-                  />
+                  <span className="w-4 h-4 border-2 border-button-text/30 border-t-button-text rounded-full animate-spin" />
                   Creating account...
                 </>
               ) : (
@@ -292,13 +178,7 @@ function SignupPage() {
             <button
               type="button"
               onClick={() => navigate("/login")}
-              className="
-                font-semibold
-                text-heading
-                hover:text-primary-hover
-                transition
-                cursor-pointer
-              "
+              className="font-semibold text-heading hover:text-primary-hover transition cursor-pointer"
             >
               Log in
             </button>

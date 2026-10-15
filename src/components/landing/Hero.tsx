@@ -1,4 +1,3 @@
-import sunflowerImage from "../../assets/sunflower.jpg";
   import yellowLineVideo from "../../assets/yellow_line_loop.webm";
 function Hero() {
   return (

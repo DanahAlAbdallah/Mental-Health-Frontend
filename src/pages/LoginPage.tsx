@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import backgroundImage from "../assets/back.png";
 import yellowLineVideo from "../assets/yellow_line_loop.webm";
 function LoginPage() {
   const [email, setEmail] = useState("");

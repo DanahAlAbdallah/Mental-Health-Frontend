@@ -1,56 +1,56 @@
-
+@theme {
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Poppins", ui-sans-serif, system-ui, sans-serif;
+}
 
 :root {
   /* Primary — calm and welcoming blue */
   --color-primary: #6ab4f0;
-  --color-primary-hover: #477FA8;
+  --color-primary-hover: #477fa8;
 
   /* Backgrounds — clean and airy */
-  --color-background: #F8F9FC;
-  --color-background-soft: #EAF3FA;
+  --color-background: #f8f9fc;
+  --color-background-soft: #eaf3fa;
 
   /* Text — strong contrast and readability */
-  --color-heading: #202A35;
+  --color-heading: #202a35;
   --color-text: #394653;
   --color-muted: #788694;
 
   /* Button text */
-  --color-button-text: #202A35;
+  --color-button-text: #202a35;
 
   /* Cards and borders */
-  --color-surface: #FFFFFF;
-  --color-border: #DCE6EF;
+  --color-surface: #ffffff;
+  --color-border: #dce6ef;
 
   /* Yellow — sunshine accents */
-  --color-accent: #FBE85A;
-  --color-accent-hover: #F0D638;
+  --color-accent: #fbe85a;
+  --color-accent-hover: #f0d638;
 }
-
-
 
 @theme {
   /* Pastel blue — primary actions */
   --color-primary: #5ea6e1;
-  --color-primary-hover: #86B8E0;
+  --color-primary-hover: #86b8e0;
 
   /* White and soft blue backgrounds */
-  --color-background: #FFFFFF;
-  --color-background-soft: #F0F7FC;
+  --color-background: #ffffff;
+  --color-background-soft: #f0f7fc;
 
   /* Black text for clear readability */
   --color-heading: #202124;
-  --color-text: #33363A;
+  --color-text: #33363a;
   --color-muted: #707780;
 
   /* Button text */
   --color-button-text: #202124;
 
   /* Cards and borders */
-  --color-surface: #FFFFFF;
-  --color-border: #DCE7EF;
+  --color-surface: #ffffff;
+  --color-border: #dce7ef;
 
   /* Optional pastel yellow accents */
-  --color-accent: #F7E6A1;
-  --color-accent-hover: #EED77A;
+  --color-accent: #f7e6a1;
+  --color-accent-hover: #eed77a;
 }
-

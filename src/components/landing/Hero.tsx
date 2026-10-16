@@ -1,4 +1,4 @@
-  import yellowLineVideo from "../../assets/yellow_line_loop.webm";
+import yellowLineVideo from "../../assets/yellow_line_loop.webm";
 function Hero() {
   return (
     <section className="grid items-center gap-10 bg-background-soft px-10 py-20 md:grid-cols-2">
@@ -8,7 +8,7 @@ function Hero() {
         </p>
 
         <h1
-          style={{ fontFamily: "'Lora', serif" }}
+          // style={{ fontFamily: "'Lora', serif" }}
           className="mb-5 text-5xl leading-tight text-heading"
         >
           It's okay to not be okay.
@@ -21,24 +21,22 @@ function Hero() {
           is that you have the strength to rise again.
         </p>
 
-        <button className="rounded-full bg-accent px-6 py-3 font-semibold text-button-text transition-colors hover:bg-accent-hover">
-          Start Your Journey →
+        <button className="cursor-pointer rounded-full text-white bg-accent px-6 py-3 font-semibold text-button-text transition-colors hover:bg-accent-hover">
+          Book your session →
         </button>
       </div>
 
-   
-
-<div className="flex justify-center">
-  <video
-    src={yellowLineVideo}
-    autoPlay
-    loop
-    muted
-    playsInline
-    aria-label="Animated yellow line"
-    className="w-full max-w-md object-contain"
-  />
-</div>
+      <div className="flex justify-center">
+        <video
+          src={yellowLineVideo}
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-label="Animated yellow line"
+          className="w-full max-w-md object-contain"
+        />
+      </div>
     </section>
   );
 }

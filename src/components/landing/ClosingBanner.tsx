@@ -3,7 +3,7 @@ function ClosingBanner() {
     <section className="bg-gradient-to-b from-sky-50 to-sky-100 px-10 py-16 text-center">
       <p
         className="text-heading text-2xl italic max-w-xl mx-auto"
-        style={{ fontFamily: "'Lora', serif" }}
+        // style={{ fontFamily: "'Lora', serif" }}
       >
         Even after the darkest days...
         <br />

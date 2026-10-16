@@ -5,6 +5,14 @@ interface ArticleCardProps {
   article: Article;
 }
 
+function formatDate(date: string) {
+  return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
 function ArticleCard({ article }: ArticleCardProps) {
   return (
     <Link to={`/articles/${article.id}`}>
@@ -13,14 +21,14 @@ function ArticleCard({ article }: ArticleCardProps) {
           {article.category}
         </span>
         <h2
-          style={{ fontFamily: "'Lora', serif" }}
+          // style={{ fontFamily: "'Lora', serif" }}
           className="text-lg text-heading mt-3"
         >
           {article.title}
         </h2>
         <p className="text-text text-sm mt-2 line-clamp-2">{article.content}</p>
         <div className="text-xs text-muted mt-4 pt-3 border-t border-background">
-          By {article.author} · {article.createdAt}
+          By {article.author} · {formatDate(article.createdAt)}
         </div>
       </div>
     </Link>

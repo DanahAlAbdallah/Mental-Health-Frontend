@@ -1,85 +1,43 @@
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer className="bg-background-soft px-10 py-12 text-text">
-      <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-4">
-        <div>
-          <div className="mb-3 flex items-center gap-2">
-            {/* <span className="text-2xl">🌻</span> */}
-            <span className="font-semibold text-heading">
-              Athar - اثر
-            </span>
-          </div>
-
-          <p className="text-sm text-muted">
-            Your mind matters, every step of the way.
-          </p>
+    <footer className="border-t border-border bg-white px-6 py-10">
+      <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 md:flex-row md:justify-between">
+        {/* Brand */}
+        <div className="text-center md:text-left">
+          <Link
+            to="/"
+            className="text-xl tracking-wide text-heading"
+          >
+            EUPHORIA
+          </Link>
+          <p className="mt-1 text-sm text-muted">Your mind matters.</p>
         </div>
 
-        <div>
-          <h4 className="mb-3 text-sm font-semibold text-heading">
-            Explore
-          </h4>
-
-          <ul className="space-y-2 text-sm text-muted">
-            <li>
-              <a href="#" className="transition-colors hover:text-heading">
-                Home
-              </a>
-            </li>
-            <li>
-              <a href="#" className="transition-colors hover:text-heading">
-                About
-              </a>
-            </li>
-            <li>
-              <a href="#" className="transition-colors hover:text-heading">
-                Resources
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="mb-3 text-sm font-semibold text-heading">
-            Support
-          </h4>
-
-          <ul className="space-y-2 text-sm text-muted">
-            <li>
-              <a href="#" className="transition-colors hover:text-heading">
-                Get Support
-              </a>
-            </li>
-            <li>
-              <a href="#" className="transition-colors hover:text-heading">
-                Contact
-              </a>
-            </li>
-            <li>
-              <a href="#" className="transition-colors hover:text-heading">
-                FAQ
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="mb-3 text-sm font-semibold text-heading">
+        {/* Links */}
+        <nav className="flex items-center gap-8 text-sm text-muted">
+          <Link to="/articles" className="transition-colors hover:text-heading">
+            Articles
+          </Link>
+          <Link
+            to="/therapists"
+            className="transition-colors hover:text-heading"
+          >
+            Therapists
+          </Link>
+          <a
+            href="mailto:hello@euphoria.com"
+            className="transition-colors hover:text-heading"
+          >
             Contact
-          </h4>
-
-          <p className="text-sm text-muted">
-            hello@bloomagain.com
-          </p>
-          <p className="mt-1 text-sm text-muted">
-            Beirut, Lebanon
-          </p>
-        </div>
+          </a>
+        </nav>
       </div>
 
-      <div className="mx-auto mt-8 max-w-6xl border-t border-border pt-6 text-center text-xs text-muted">
-        © {new Date().getFullYear()} Bloom Again. All rights reserved.
+      {/* Bottom line */}
+      <div className="mx-auto mt-8 max-w-6xl text-center text-xs text-muted/80 md:text-left">
+        © {new Date().getFullYear()} EUPHORIA. All rights reserved.
       </div>
     </footer>
   );

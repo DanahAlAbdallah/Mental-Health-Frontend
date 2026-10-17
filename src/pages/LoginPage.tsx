@@ -12,17 +12,18 @@ function LoginPage() {
   // const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    // setLoading(true);
-    const success = await login(email, password);
+  e.preventDefault();
+  setError("");
+  // setLoading(true);
 
-    if (success) {
-      navigate("/");
-    } else {
-      setError("Invalid email or password");
-      // setLoading(false);
-    }
+  try {
+    await login(email, password);
+    navigate("/");
+  } catch (err) {
+    setError(err instanceof Error ? err.message : "Something went wrong");
+    // setLoading(false);
   }
+}
 
   return (
     <main className="relative h-screen overflow-hidden bg-[#EAF2F9] flex items-center justify-center px-4">

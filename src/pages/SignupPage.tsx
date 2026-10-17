@@ -20,12 +20,11 @@ function SignupPage() {
     setLoading(true);
     setError("");
 
-    const success = await signup(name, email, password, role);
-
-    if (success) {
+    try {
+      await signup(name, email, password, role);
       navigate("/");
-    } else {
-      setError("Signup failed — email may already be in use");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
       setLoading(false);
     }
   }

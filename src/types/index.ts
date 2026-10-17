@@ -27,3 +27,22 @@ export interface AvailabilitySlot {
   endTime: string;
   isBooked: boolean;
 }
+
+// SESSIONS
+export interface Session {
+  id: string;
+  therapistId: string;
+  patientId: string;
+  slotId: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  status: string;
+  createdAt: string;
+}
+
+//THERAPIST
+export interface Therapist {
+  id: string;
+  name: string;
+}

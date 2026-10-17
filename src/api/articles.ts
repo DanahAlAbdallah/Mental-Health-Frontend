@@ -1,72 +1,57 @@
 import type { Article } from "../types";
+import { apiRequest, ApiError } from "./apiRequest";
 
-const BASE_URL = `${import.meta.env.VITE_API_URL}/api/articles`;
-
-function getAuthHeaders() {
-  const token = localStorage.getItem("token");
-  return {
-    "Content-Type": "application/json",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
-}
-
+// GET ALL ARTICLES WITH SEARCH
 export async function fetchArticles(search?: string): Promise<Article[]> {
-  const url = search
-    ? `${BASE_URL}?search=${encodeURIComponent(search)}`
-    : BASE_URL;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("Failed to fetch articles");
-  return res.json();
+  const query = search ? `?search=${encodeURIComponent(search)}` : "";
+  return apiRequest<Article[]>(`/articles${query}`);
 }
 
+// GET SPECIFIC ARTICLE BY ID
 export async function fetchArticleById(
   id: string,
 ): Promise<Article | undefined> {
-  const res = await fetch(`${BASE_URL}/${id}`);
-  if (res.status === 404) return undefined;
-  if (!res.ok) throw new Error("Failed to fetch article");
-  return res.json();
-}
-
-export async function fetchLatestArticles(): Promise<Article[]> {
-  const res = await fetch(`${BASE_URL}/latest`);
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch latest articles");
+  try {
+    return await apiRequest<Article>(`/articles/${id}`);
+  } catch (error) {
+    // a missing article is not a crash, the page shows "not found"
+    if (error instanceof ApiError && error.status === 404) return undefined;
+    throw error;
   }
-
-  return res.json();
 }
 
+// GET LATEST 3 ARTICLES (FOR SHOWING IN LANDING PAGE)
+export async function fetchLatestArticles(): Promise<Article[]> {
+  return apiRequest<Article[]>("/articles/latest");
+}
+
+// CREATE NEW ARTICLE
 export async function createArticle(
   data: Omit<Article, "id" | "createdAt">,
 ): Promise<Article> {
-  const res = await fetch(BASE_URL, {
+  return apiRequest<Article>("/articles", {
     method: "POST",
-    headers: getAuthHeaders(),
+    auth: true,
     body: JSON.stringify(data),
   });
-  if (!res.ok) throw new Error("Failed to create article");
-  return res.json();
 }
 
+// UPDATE EXISTING ARTICLE
 export async function updateArticle(
   id: string,
   data: Omit<Article, "id" | "createdAt">,
 ): Promise<Article> {
-  const res = await fetch(`${BASE_URL}/${id}`, {
+  return apiRequest<Article>(`/articles/${id}`, {
     method: "PUT",
-    headers: getAuthHeaders(),
+    auth: true,
     body: JSON.stringify(data),
   });
-  if (!res.ok) throw new Error("Failed to update article");
-  return res.json();
 }
 
+// DELETE EXISTING ARTICLE
 export async function deleteArticle(id: string): Promise<void> {
-  const res = await fetch(`${BASE_URL}/${id}`, {
+  return apiRequest<void>(`/articles/${id}`, {
     method: "DELETE",
-    headers: getAuthHeaders(),
+    auth: true,
   });
-  if (!res.ok) throw new Error("Failed to delete article");
 }

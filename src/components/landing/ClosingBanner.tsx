@@ -1,15 +1,16 @@
+// THE LAST SECTION OF THE LANDING PAGE: A SHORT CLOSING MESSAGE
 function ClosingBanner() {
+  //DESIGN
   return (
     <section className="bg-gradient-to-b from-sky-50 to-sky-100 px-10 py-16 text-center">
-      <p
-        className="text-heading text-2xl italic max-w-xl mx-auto"
-        // style={{ fontFamily: "'Lora', serif" }}
-      >
+      <p className="mx-auto max-w-xl text-2xl italic text-heading">
         Even after the darkest days...
         <br />
         you can still bloom.
       </p>
-      <div className="w-16 h-0.5 bg-primary mx-auto mt-6"></div>
+
+      {/* DECORATIVE LINE */}
+      <div className="mx-auto mt-6 h-0.5 w-16 bg-primary" />
     </section>
   );
 }

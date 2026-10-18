@@ -1,4 +1,4 @@
-import type { Therapist } from "../types";
+import type {  Therapist } from "../types";
 import { apiRequest } from "./apiRequest";
 
 // GET ONLY THERAPISTS

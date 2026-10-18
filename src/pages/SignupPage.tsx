@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import yellowLineVideo from "../assets/yellow_line_loop.webm";
 
+// STYLE SHARED BY ALL TEXT FIELDS, SO WE WRITE IT ONLY ONCE
+const inputClass =
+  "w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-heading placeholder:text-muted outline-none transition focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10";
+
 function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -14,11 +18,12 @@ function SignupPage() {
   const { signup } = useAuth();
   const navigate = useNavigate();
 
+  // RUNS WHEN THE USER CLICKS "CREATE ACCOUNT": SENDS THE DATA,
+  // THEN GOES TO THE HOME PAGE, OR SHOWS THE ERROR IF IT FAILS
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
-    setLoading(true);
     setError("");
+    setLoading(true);
 
     try {
       await signup(name, email, password, role);
@@ -31,7 +36,6 @@ function SignupPage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#EAF2F9] flex items-center justify-center px-4 py-8">
-      {/* Animated line - left */}
       <video
         src={yellowLineVideo}
         autoPlay
@@ -42,7 +46,6 @@ function SignupPage() {
         className="pointer-events-none absolute -left-40 top-1/2 -translate-y-1/2 w-[900px] max-w-none opacity-40"
       />
 
-      {/* Animated line - right (mirrored) */}
       <video
         src={yellowLineVideo}
         autoPlay
@@ -53,32 +56,28 @@ function SignupPage() {
         className="pointer-events-none absolute -right-64 top-1/2 -translate-y-1/2 -scale-x-100 w-[900px] max-w-none opacity-40 hidden md:block"
       />
 
-      {/* Signup card */}
+      {/* SIGNUP CARD */}
       <div className="relative z-10 w-full max-w-md">
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl px-6 py-7 sm:px-9 sm:py-8">
-          {/* Logo */}
+          {/* LOGO + HEADING */}
           <div className="text-center mb-5">
             <h1 className="text-xl font-semibold text-heading">EUPHORIA</h1>
-          </div>
-
-          {/* Heading */}
-          <div className="text-center mb-5">
-            <h2 className="text-2xl font-serif text-heading mb-1">
+            <h2 className="text-2xl font-serif text-heading mt-2">
               Create your account
             </h2>
             <p className="text-sm text-text">Start your journey with us.</p>
           </div>
 
-          {/* Error */}
+          {/* ERROR */}
           {error && (
             <div className="mb-4 rounded-xl bg-red-50 border border-red-100 px-4 py-2.5 text-sm text-red-600">
               {error}
             </div>
           )}
 
-          {/* Form */}
+          {/* FORM */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Name */}
+            {/* FULL NAME */}
             <div>
               <label
                 htmlFor="name"
@@ -93,11 +92,11 @@ function SignupPage() {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name"
                 required
-                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-heading placeholder:text-muted outline-none transition focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10"
+                className={inputClass}
               />
             </div>
 
-            {/* Email */}
+            {/* EMAIL */}
             <div>
               <label
                 htmlFor="email"
@@ -112,11 +111,11 @@ function SignupPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-heading placeholder:text-muted outline-none transition focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10"
+                className={inputClass}
               />
             </div>
 
-            {/* Password */}
+            {/* PASSWORD */}
             <div>
               <label
                 htmlFor="password"
@@ -131,11 +130,11 @@ function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Create a password"
                 required
-                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-heading placeholder:text-muted outline-none transition focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10"
+                className={inputClass}
               />
             </div>
 
-            {/* Role */}
+            {/* ROLE */}
             <div>
               <label
                 htmlFor="role"
@@ -147,14 +146,14 @@ function SignupPage() {
                 id="role"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-heading outline-none transition focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 cursor-pointer"
+                className={`${inputClass} cursor-pointer`}
               >
                 <option value="client">Client</option>
                 <option value="therapist">Therapist</option>
               </select>
             </div>
 
-            {/* Signup */}
+            {/* SUBMIT BUTTON */}
             <button
               type="submit"
               disabled={loading}
@@ -171,7 +170,7 @@ function SignupPage() {
             </button>
           </form>
 
-          {/* Login */}
+          {/* LOGIN LINK */}
           <p className="text-center text-sm text-muted mt-5">
             Already have an account?{" "}
             <button

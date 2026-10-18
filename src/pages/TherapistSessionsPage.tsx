@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { fetchMySessions, updateSessionStatus } from "../api/sessions";
 import { useAuth } from "../context/AuthContext";
-import type { Session } from "../api/sessions";
+import { formatDate } from "../utils/formatDate";
+import type { Session } from "../types";
+
+// THE TWO ANSWERS A THERAPIST CAN GIVE TO A SESSION REQUEST
+type Decision = "confirmed" | "rejected";
 
 function TherapistSessionsPage() {
   const { token } = useAuth();
@@ -20,19 +24,43 @@ function TherapistSessionsPage() {
     (session) => session.status === "confirmed",
   );
 
-  async function handleDecision(
-    sessionId: string,
-    status: "confirmed" | "rejected",
-  ) {
+  // RUNS WHEN THE PAGE OPENS: LOADS THE THERAPIST'S SESSIONS FROM THE BACKEND,
+  // OR SHOWS AN ERROR IF THE USER IS NOT LOGGED IN OR THE REQUEST FAILS
+  useEffect(() => {
+    async function loadSessions() {
+      if (!token) {
+        setError("Please log in to view your sessions.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const data = await fetchMySessions();
+        setSessions(data);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to load your sessions.",
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadSessions();
+  }, [token]);
+
+  // RUNS WHEN THE THERAPIST CLICKS "CONFIRM" OR "REJECT": SENDS THE ANSWER,
+  // RELOADS THE LIST AND SHOWS A MESSAGE WITH THE RESULT
+  async function handleDecision(sessionId: string, status: Decision) {
     if (!token) return;
 
     setActionLoading(sessionId);
     setActionMessage("");
 
     try {
-      await updateSessionStatus(sessionId, status, token);
+      await updateSessionStatus(sessionId, status);
 
-      const updatedSessions = await fetchMySessions(token);
+      const updatedSessions = await fetchMySessions();
       setSessions(updatedSessions);
 
       setActionMessage(
@@ -48,32 +76,11 @@ function TherapistSessionsPage() {
       setActionLoading(null);
     }
   }
-  useEffect(() => {
-    async function loadSessions() {
-      if (!token) {
-        setError("Please log in to view your sessions.");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const data = await fetchMySessions(token);
-        setSessions(data);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to load your sessions.",
-        );
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadSessions();
-  }, [token]);
 
   return (
     <main className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-5xl space-y-8">
+        {/* HEADER */}
         <header className="space-y-3">
           <p className="text-sm font-medium text-primary">Your practice</p>
 
@@ -87,6 +94,7 @@ function TherapistSessionsPage() {
           </p>
         </header>
 
+        {/* RESULT OF THE LAST ACTION*/}
         {actionMessage && (
           <p
             role="status"
@@ -96,6 +104,7 @@ function TherapistSessionsPage() {
           </p>
         )}
 
+        {/* ERROR */}
         {error && (
           <div
             role="alert"
@@ -110,68 +119,73 @@ function TherapistSessionsPage() {
             Loading your sessions...
           </p>
         ) : (
-          <>
-            <section className="space-y-4">
-              <div className="flex items-center justify-between border-b border-border pb-3">
-                <h2 className="text-xl font-semibold text-heading">
-                  Pending Requests
-                </h2>
+          !error && (
+            <>
+              {/* PENDING REQUESTS */}
+              <section className="space-y-4">
+                <div className="flex items-center justify-between border-b border-border pb-3">
+                  <h2 className="text-xl font-semibold text-heading">
+                    Pending Requests
+                  </h2>
 
-                <span className="rounded-full bg-accent px-3 py-1 text-sm font-medium text-button-text">
-                  {pendingSessions.length}
-                </span>
-              </div>
+                  <span className="rounded-full bg-accent px-3 py-1 text-sm font-medium text-button-text">
+                    {pendingSessions.length}
+                  </span>
+                </div>
 
-              {pendingSessions.length === 0 ? (
-                <div className="rounded-2xl border border-border bg-surface px-5 py-10 text-center">
-                  <h3 className="font-semibold text-heading">
-                    No pending requests
-                  </h3>
-                  <p className="mt-2 text-sm text-muted">
-                    New session requests from your clients will appear here.
-                  </p>
-                </div>
-              ) : (
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {pendingSessions.map((session) => (
-                    <SessionCard
-                      key={session.id}
-                      session={session}
-                      actionLoading={actionLoading === session.id}
-                      onDecision={handleDecision}
-                    />
-                  ))}
-                </div>
-              )}
-            </section>
+                {pendingSessions.length === 0 ? (
+                  <div className="rounded-2xl border border-border bg-surface px-5 py-10 text-center">
+                    <h3 className="font-semibold text-heading">
+                      No pending requests
+                    </h3>
+                    <p className="mt-2 text-sm text-muted">
+                      New session requests from your clients will appear here.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {pendingSessions.map((session) => (
+                      <SessionCard
+                        key={session.id}
+                        session={session}
+                        actionLoading={actionLoading === session.id}
+                        onDecision={handleDecision}
+                      />
+                    ))}
+                  </div>
+                )}
+              </section>
 
-            <section className="space-y-4">
-              <div className="border-b border-border pb-3">
-                <h2 className="text-xl font-semibold text-heading">
-                  Confirmed Sessions
-                </h2>
-              </div>
+              {/* CONFIRMED SESSIONS */}
+              <section className="space-y-4">
+                <div className="border-b border-border pb-3">
+                  <h2 className="text-xl font-semibold text-heading">
+                    Confirmed Sessions
+                  </h2>
+                </div>
 
-              {confirmedSessions.length === 0 ? (
-                <div className="rounded-2xl border border-border bg-surface px-5 py-8 text-center text-sm text-muted">
-                  You don't have any confirmed sessions yet.
-                </div>
-              ) : (
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {confirmedSessions.map((session) => (
-                    <SessionCard key={session.id} session={session} />
-                  ))}
-                </div>
-              )}
-            </section>
-          </>
+                {confirmedSessions.length === 0 ? (
+                  <div className="rounded-2xl border border-border bg-surface px-5 py-8 text-center text-sm text-muted">
+                    You don't have any confirmed sessions yet.
+                  </div>
+                ) : (
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {confirmedSessions.map((session) => (
+                      <SessionCard key={session.id} session={session} />
+                    ))}
+                  </div>
+                )}
+              </section>
+            </>
+          )
         )}
       </div>
     </main>
   );
 }
 
-
+// ONE SESSION CARD: SHOWS THE DATE, TIME AND STATUS,
+// AND THE CONFIRM / REJECT BUTTONS ONLY WHEN THE SESSION IS STILL PENDING
 function SessionCard({
   session,
   actionLoading = false,
@@ -179,23 +193,19 @@ function SessionCard({
 }: {
   session: Session;
   actionLoading?: boolean;
-  onDecision?: (
-    sessionId: string,
-    status: "confirmed" | "rejected",
-  ) => void;
+  onDecision?: (sessionId: string, status: Decision) => void;
 }) {
   const isPending = session.status === "pending";
 
+  // SESSION CARD DESIGN
   return (
     <article className="rounded-2xl border border-border bg-surface p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="font-semibold text-heading">
-            Session request
-          </p>
+          <p className="font-semibold text-heading">Session request</p>
 
           <p className="mt-1 text-sm text-muted">
-            Date: {session.date}
+            Date: {formatDate(session.date)}
           </p>
 
           <p className="mt-1 text-sm text-muted">
@@ -203,7 +213,7 @@ function SessionCard({
           </p>
         </div>
 
-        <span className="rounded-full bg-background-soft px-3 py-1 text-xs font-medium text-heading">
+        <span className="rounded-full bg-background-soft px-3 py-1 text-xs font-medium capitalize text-heading">
           {session.status}
         </span>
       </div>

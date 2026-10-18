@@ -1,30 +1,46 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { fetchTherapistSlots } from "../api/availability";
-import type { AvailabilitySlot } from "../types";
-import { useAuth } from "../context/AuthContext";
 import { bookSession } from "../api/sessions";
+import { useAuth } from "../context/AuthContext";
+import { formatDate } from "../utils/formatDate";
+import type { AvailabilitySlot } from "../types";
 
+// THE THERAPIST PAGE: SHOWS THE OPEN TIME SLOTS OF ONE THERAPIST
+// AND LETS A CLIENT REQUEST A SESSION
 function TherapistDetailPage() {
   const { id } = useParams();
   const { user, token } = useAuth();
+
   const [slots, setSlots] = useState<AvailabilitySlot[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
   const [bookingSlotId, setBookingSlotId] = useState<string | null>(null);
   const [bookingMessage, setBookingMessage] = useState("");
   const [bookingError, setBookingError] = useState(false);
 
+  // ONLY CLIENTS CAN REQUEST SESSIONS
+  const isClient = user?.role === "client";
+
+  // RUNS WHEN THE PAGE OPENS: LOADS THE THERAPIST'S SLOTS FROM THE BACKEND,
+  // OR SHOWS AN ERROR IF IT FAILS
   useEffect(() => {
     if (!id) return;
-    fetchTherapistSlots(id).then((data) => {
-      setSlots(data);
-      setLoading(false);
-    });
+
+    fetchTherapistSlots(id)
+      .then(setSlots)
+      .catch((err) =>
+        setLoadError(
+          err instanceof Error ? err.message : "Could not load available times",
+        ),
+      )
+      .finally(() => setLoading(false));
   }, [id]);
 
-  // BOOKING FUNCTION
+  // RUNS WHEN THE CLIENT CLICKS "REQUEST SESSION": SENDS THE REQUEST,
+  // TAKES THE SLOT OUT OF THE LIST AND SHOWS A MESSAGE WITH THE RESULT
   async function handleBooking(slotId: string) {
-    if (!token || user?.role !== "client") {
+    if (!token || !isClient) {
       setBookingError(true);
       setBookingMessage("Please log in as a client to request a session.");
       return;
@@ -35,7 +51,7 @@ function TherapistDetailPage() {
     setBookingError(false);
 
     try {
-      await bookSession(slotId, token);
+      await bookSession(slotId);
 
       setSlots((currentSlots) =>
         currentSlots.filter((slot) => slot.id !== slotId),
@@ -60,19 +76,20 @@ function TherapistDetailPage() {
     return <div className="p-8">Loading available times...</div>;
   }
 
+  // THERAPIST DETAIL PAGE DESIGN
   return (
     <div className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-4xl space-y-8">
-        {/* Back navigation */}
+        {/* BACK NAVIGATION */}
         <Link
           to="/therapists"
-          className="inline-flex items-center gap-2 text-sm font-medium text-muted transition hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/30 rounded-md"
+          className="inline-flex items-center gap-2 rounded-md text-sm font-medium text-muted transition hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
         >
           <span aria-hidden="true">←</span>
           Back to therapists
         </Link>
 
-        {/* Header */}
+        {/* HEADER */}
         <header className="space-y-3">
           <p className="text-sm font-medium text-primary">Your next step</p>
 
@@ -86,13 +103,14 @@ function TherapistDetailPage() {
           </p>
         </header>
 
+        {/* RESULT OF LAST BOOKING SESSION*/}
         {bookingMessage && (
           <div
             role="status"
             aria-live="polite"
             className={`rounded-xl border p-4 text-sm ${
               bookingError
-                ? "border-border bg-background-soft text-heading"
+                ? "border-red-100 bg-red-50 text-red-600"
                 : "border-border bg-background-soft text-heading"
             }`}
           >
@@ -100,7 +118,7 @@ function TherapistDetailPage() {
           </div>
         )}
 
-        {/* Available slots */}
+        {/* AVAILABLE SLOTS */}
         <section className="space-y-4">
           <div className="flex items-center justify-between border-b border-border pb-4">
             <h2 className="font-semibold text-heading">Open appointments</h2>
@@ -110,7 +128,11 @@ function TherapistDetailPage() {
             </span>
           </div>
 
-          {slots.length === 0 ? (
+          {loadError ? (
+            <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-6 text-center text-sm text-red-600">
+              {loadError}
+            </div>
+          ) : slots.length === 0 ? (
             <div className="rounded-2xl border border-border bg-surface px-5 py-14 text-center">
               <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-surface-soft text-primary">
                 <svg
@@ -148,7 +170,7 @@ function TherapistDetailPage() {
                   key={slot.id}
                   className="flex items-center gap-4 rounded-2xl border border-border bg-surface p-5 transition duration-200 hover:border-primary/40 hover:shadow-md hover:shadow-primary/5"
                 >
-                  {/* Time icon */}
+                  {/* TIME ICON */}
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-surface-soft text-primary">
                     <svg
                       viewBox="0 0 24 24"
@@ -163,18 +185,19 @@ function TherapistDetailPage() {
                     </svg>
                   </div>
 
-                  {/* Date and time */}
+                  {/* DATE AND TIME */}
                   <div className="min-w-0 flex-1">
-                    <p className="font-semibold text-heading">{slot.date}</p>
+                    <p className="font-semibold text-heading">
+                      {formatDate(slot.date)}
+                    </p>
 
                     <p className="mt-1 text-sm text-muted">
                       {slot.startTime} – {slot.endTime}
                     </p>
                   </div>
 
-                  {/* Availability indicator */}
-                  {/* Booking action */}
-                  {user?.role === "client" && (
+                  {/* BOOKING ACTION */}
+                  {isClient && (
                     <button
                       type="button"
                       onClick={() => handleBooking(slot.id)}

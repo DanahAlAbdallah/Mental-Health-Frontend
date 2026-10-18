@@ -1,4 +1,4 @@
-import type { Session } from "../types";
+import type { Session } from "../types/index";
 import { apiRequest } from "./apiRequest";
 
 // CLIENT SESSION BOOKING

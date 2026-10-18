@@ -26,6 +26,12 @@ function App() {
         {/* LANDING PAGE */}
         <Route path="/" element={<LandingPage />} />
 
+        {/* LOGIN PAGE */}
+        <Route path="/login" element={<LoginPage />} />
+
+        {/* SIGNUP */}
+        <Route path="/signup" element={<SignupPage />} />
+
         {/* --------------------------------ARTICLES ROUTES------------------------- */}
 
         {/* MAIN ARTICLES PAGE */}
@@ -33,9 +39,6 @@ function App() {
 
         {/* ARTICLE DETAIL PAGE */}
         <Route path="/articles/:id" element={<ArticleDetailPage />} />
-
-        {/* LOGIN PAGE */}
-        <Route path="/login" element={<LoginPage />} />
 
         {/* ADD NEW ARTICLE BY THERAPIST OR ADMIN */}
         <Route
@@ -57,9 +60,7 @@ function App() {
           }
         />
 
-        {/* SIGNUP */}
-        <Route path="/signup" element={<SignupPage />} />
-
+        {/* --------------------------------THERAPIST ROUTES------------------------- */}
         {/* AVAILABILITY */}
         <Route
           path="/availability"
@@ -79,7 +80,6 @@ function App() {
             </RequireRole>
           }
         />
-
         <Route path="/therapists/:id" element={<TherapistDetailPage />} />
         <Route path="/therapists" element={<TherapistsPage />} />
       </Routes>

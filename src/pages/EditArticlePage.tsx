@@ -3,6 +3,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { fetchArticleById, updateArticle } from "../api/articles";
 import { useAuth } from "../context/AuthContext";
 
+// STYLE SHARED BY THE TITLE, CATEGORY AND CONTENT FIELDS, SO WE WRITE IT ONLY ONCE
+const fieldClass =
+  "w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-heading outline-none transition placeholder:text-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/20";
+
 function EditArticlePage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -11,24 +15,29 @@ function EditArticlePage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("General");
-  const [author, setAuthor] = useState(""); // original author, never changed
+  const [author, setAuthor] = useState(""); 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
+  // RUNS WHEN THE PAGE OPENS: LOADS THE ARTICLE AND FILLS THE FORM WITH IT
   useEffect(() => {
     if (!id) return;
-    fetchArticleById(id).then((article) => {
-      if (article) {
-        setTitle(article.title);
-        setContent(article.content);
-        setCategory(article.category);
-        setAuthor(article.author);
-      }
-      setLoading(false);
-    });
+
+    fetchArticleById(id)
+      .then((article) => {
+        if (article) {
+          setTitle(article.title);
+          setContent(article.content);
+          setCategory(article.category);
+          setAuthor(article.author);
+        }
+      })
+      .finally(() => setLoading(false));
   }, [id]);
 
+  // RUNS WHEN THE USER CLICKS "SAVE CHANGES": SENDS THE UPDATED ARTICLE,
+  // THEN GOES BACK TO THE ARTICLE PAGE, OR SHOWS THE ERROR IF IT FAILS
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!id) return;
@@ -40,23 +49,28 @@ function EditArticlePage() {
       await updateArticle(id, {
         title,
         content,
-        author, // keep the original author
-        category, // keep (or change) the real category
+        author,
+        category,
       });
 
       navigate(`/articles/${id}`, {
         state: { message: "Article updated successfully" },
       });
-    } catch {
-      setError("Could not save your changes. Please try again.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
       setSaving(false);
     }
   }
 
   if (loading) return <div className="p-8">Loading...</div>;
 
+  // NO AUTHOR MEANS THE ARTICLE WAS NOT FOUND (OR FAILED TO LOAD)
+  if (!author) {
+    return <div className="p-8 text-heading">Article not found.</div>;
+  }
+
   // Only the original author can edit (remove this if admins/others can too)
-  if (user && author && user.name !== author) {
+  if (user && user.name !== author) {
     return (
       <div className="p-8 text-heading">
         You can only edit your own articles.
@@ -64,10 +78,11 @@ function EditArticlePage() {
     );
   }
 
+  // EDIT ARTICLE DESIGN
   return (
     <div className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-2xl">
-        {/* Header */}
+        {/* HEADER */}
         <div className="mb-8">
           <p className="mb-2 text-sm font-medium text-primary">
             Knowledge & well-being
@@ -80,19 +95,19 @@ function EditArticlePage() {
           </p>
         </div>
 
-        {/* Form */}
+        {/* FORM */}
         <form
           onSubmit={handleSubmit}
           className="space-y-6 rounded-2xl border border-border bg-surface p-5 shadow-sm sm:p-8"
         >
-          {/* Error */}
+          {/* ERROR */}
           {error && (
             <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-2.5 text-sm text-red-600">
               {error}
             </div>
           )}
 
-          {/* Title */}
+          {/* TITLE */}
           <div>
             <label
               htmlFor="article-title"
@@ -107,11 +122,11 @@ function EditArticlePage() {
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter your article title"
               required
-              className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-heading outline-none transition placeholder:text-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className={fieldClass}
             />
           </div>
 
-          {/* Category */}
+          {/* CATEGORY */}
           <div>
             <label
               htmlFor="article-category"
@@ -123,7 +138,7 @@ function EditArticlePage() {
               id="article-category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full cursor-pointer rounded-xl border border-border bg-surface px-4 py-3 text-sm text-heading outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className={`${fieldClass} cursor-pointer`}
             >
               <option value="General">General</option>
               <option value="Anxiety">Anxiety</option>
@@ -133,7 +148,7 @@ function EditArticlePage() {
             </select>
           </div>
 
-          {/* Content */}
+          {/* CONTENT */}
           <div>
             <label
               htmlFor="article-content"
@@ -148,11 +163,11 @@ function EditArticlePage() {
               placeholder="Write your article here..."
               required
               rows={10}
-              className="w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-sm leading-7 text-heading outline-none transition placeholder:text-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className={`${fieldClass} resize-y leading-7`}
             />
           </div>
 
-          {/* Actions */}
+          {/* ACTIONS */}
           <div className="flex flex-col-reverse gap-3 border-t border-border pt-5 sm:flex-row sm:justify-end">
             <button
               type="button"

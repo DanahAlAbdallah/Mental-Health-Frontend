@@ -16,6 +16,28 @@ export interface User {
   name: string;
   email: string;
   role: UserRole;
+  phone?: string;
+  avatarUrl?: string;
+  createdAt: string;
+}
+
+export interface TherapistProfile {
+  userId: string;
+  bio: string;
+  specialties: string[];
+  yearsOfExperience?: number;
+  languages: string[];
+  sessionPrice?: number;
+  sessionType: "online" | "in-person" | "both";
+  location?: string;
+}
+
+// WHAT THE THERAPISTS PAGE SHOWS: THE USER'S PUBLIC DATA PLUS THE PROFILE
+export interface Therapist {
+  id: string;
+  name: string;
+  avatarUrl?: string;
+  profile: TherapistProfile;
 }
 
 // AVAILABILITY SLOTS
@@ -41,8 +63,3 @@ export interface Session {
   createdAt: string;
 }
 
-//THERAPIST
-export interface Therapist {
-  id: string;
-  name: string;
-}

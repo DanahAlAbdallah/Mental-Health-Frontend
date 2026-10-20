@@ -12,6 +12,7 @@ import AvailabilityPage from "./pages/AvailabilityPage";
 import TherapistsPage from "./pages/TherapistsPage";
 import TherapistDetailPage from "./pages/TherapistDetailPage";
 import TherapistSessionsPage from "./pages/TherapistSessionsPage";
+import ProfileReminder from "./components/ProfileReminder";
 
 function App() {
   const location = useLocation();
@@ -22,6 +23,7 @@ function App() {
   return (
     <>
       {showNavbar && <Navbar />}
+      <ProfileReminder />
       <Routes>
         {/* LANDING PAGE */}
         <Route path="/" element={<LandingPage />} />

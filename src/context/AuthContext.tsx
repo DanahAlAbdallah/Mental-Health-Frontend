@@ -32,6 +32,7 @@ interface AuthContextType {
     role: string,
   ) => Promise<void>;
   logout: () => void;
+  updateUser: (user: User) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -68,6 +69,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(USER_KEY);
     setToken(null);
     setUser(null);
+  }, []);
+
+  // UPDATE THE USER IN STATE AND LOCALSTORAGE (e.g. after editing the profile)
+  const updateUser = useCallback((next: User) => {
+    localStorage.setItem(USER_KEY, JSON.stringify(next));
+    setUser(next);
   }, []);
 
   // LOG THE USER OUT AUTOMATICALLY WHEN THE TOKEN EXPIRES
@@ -109,8 +116,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login,
       signup,
       logout,
+      updateUser
     }),
-    [user, token, logout],
+    [user, token, logout, updateUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -13,6 +13,7 @@ import TherapistsPage from "./pages/TherapistsPage";
 import TherapistDetailPage from "./pages/TherapistDetailPage";
 import TherapistSessionsPage from "./pages/TherapistSessionsPage";
 import ProfileReminder from "./components/ProfileReminder";
+import Profile from "./pages/Profile";
 
 function App() {
   const location = useLocation();
@@ -34,6 +35,7 @@ function App() {
         {/* SIGNUP */}
         <Route path="/signup" element={<SignupPage />} />
 
+        <Route path="/profile" element={<Profile />} />
         {/* --------------------------------ARTICLES ROUTES------------------------- */}
 
         {/* MAIN ARTICLES PAGE */}

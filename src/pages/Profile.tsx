@@ -100,7 +100,7 @@ function Profile() {
 
   // 👇 ADD THIS, after the effect above
   useEffect(() => {
-    console.log("Form updated:", form);
+    // console.log("Form updated:", form);
   }, [form]);
 
   function handleChange(
@@ -160,7 +160,7 @@ updateUser(updatedUser);
           sessionType: form.sessionType,
           location: form.location.trim() || undefined,
         };
-        console.log(therapistData);
+        // console.log(therapistData);
         await updateMyProfile(therapistData);
       }
 
@@ -311,7 +311,7 @@ updateUser(updatedUser);
               />
             </div>
 
-            <div>
+            {/* <div>
               <label
                 htmlFor="avatarUrl"
                 className="text-sm font-medium text-heading"
@@ -327,7 +327,7 @@ updateUser(updatedUser);
                 className={inputClass}
                 placeholder="https://example.com/photo.jpg"
               />
-            </div>
+            </div> */}
           </section>
 
           {/* THERAPIST INFORMATION */}

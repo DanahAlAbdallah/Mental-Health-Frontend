@@ -11,29 +11,72 @@ function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("client");
   const [error, setError] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
   const { signup } = useAuth();
   const navigate = useNavigate();
 
+  function validatePassword(password: string): string | null {
+    if (password.length < 8) {
+      return "Password must be at least 8 characters long";
+    }
+    if (!/[A-Za-z]/.test(password)) {
+      return "Password must contain at least one letter";
+    }
+    if (!/[0-9]/.test(password)) {
+      return "Password must contain at least one number";
+    }
+    if (!/[^A-Za-z0-9]/.test(password)) {
+      return "Password must contain at least one special character (e.g. ! @ # $)";
+    }
+    return null;
+  }
+  function validateForm(): Record<string, string> {
+    const next: Record<string, string> = {};
+
+    if (!name.trim()) next.name = "Name is required";
+
+    if (!email.trim()) next.email = "Email is required";
+    else if (!/^\S+@\S+\.\S+$/.test(email.trim()))
+      next.email = "Please enter a valid email address";
+
+    if (!role) next.role = "Please select a role";
+
+    if (!password) next.password = "Password is required";
+    else {
+      const passwordError = validatePassword(password);
+      if (passwordError) next.password = passwordError;
+    }
+
+    if (!confirmPassword) next.confirmPassword = "Please confirm your password";
+    else if (password !== confirmPassword)
+      next.confirmPassword = "Passwords do not match";
+
+    return next;
+  }
   // RUNS WHEN THE USER CLICKS "CREATE ACCOUNT": SENDS THE DATA,
-  // THEN GOES TO THE HOME PAGE, OR SHOWS THE ERROR IF IT FAILS
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+
+    const validationErrors = validateForm();
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) return;
+
     setLoading(true);
 
     try {
-      await signup(name, email, password, role);
+      await signup(name.trim(), email.trim(), password, role);
       navigate("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
       setLoading(false);
     }
   }
-
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#EAF2F9] flex items-center justify-center px-4 py-8">
       <video
@@ -76,7 +119,14 @@ function SignupPage() {
           )}
 
           {/* FORM */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} noValidate className="space-y-4">
+            {/* GENERAL / SERVER ERROR */}
+            {error && (
+              <p className="text-sm text-red-600" role="alert">
+                {error}
+              </p>
+            )}
+
             {/* FULL NAME */}
             <div>
               <label
@@ -89,11 +139,17 @@ function SignupPage() {
                 id="name"
                 type="text"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  setErrors((prev) => ({ ...prev, name: "" }));
+                }}
                 placeholder="Your name"
-                required
-                className={inputClass}
+                aria-invalid={!!errors.name}
+                className={`${inputClass} ${errors.name ? "border-red-500" : ""}`}
               />
+              {errors.name && (
+                <p className="mt-1.5 text-sm text-red-600">{errors.name}</p>
+              )}
             </div>
 
             {/* EMAIL */}
@@ -108,11 +164,17 @@ function SignupPage() {
                 id="email"
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setErrors((prev) => ({ ...prev, email: "" }));
+                }}
                 placeholder="you@example.com"
-                required
-                className={inputClass}
+                aria-invalid={!!errors.email}
+                className={`${inputClass} ${errors.email ? "border-red-500" : ""}`}
               />
+              {errors.email && (
+                <p className="mt-1.5 text-sm text-red-600">{errors.email}</p>
+              )}
             </div>
 
             {/* PASSWORD */}
@@ -127,11 +189,49 @@ function SignupPage() {
                 id="password"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setErrors((prev) => ({ ...prev, password: "" }));
+                }}
                 placeholder="Create a password"
-                required
-                className={inputClass}
+                aria-invalid={!!errors.password}
+                className={`${inputClass} ${errors.password ? "border-red-500" : ""}`}
               />
+              {errors.password ? (
+                <p className="mt-1.5 text-sm text-red-600">{errors.password}</p>
+              ) : (
+                <p className="mt-1.5 text-xs text-muted">
+                  At least 8 characters, with letters, numbers, and a special
+                  character.
+                </p>
+              )}
+            </div>
+
+            {/* CONFIRM PASSWORD */}
+            <div>
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-heading mb-1.5"
+              >
+                Confirm password
+              </label>
+              <input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  setErrors((prev) => ({ ...prev, confirmPassword: "" }));
+                }}
+                placeholder="Re-enter your password"
+                aria-invalid={!!errors.confirmPassword}
+                className={`${inputClass} ${errors.confirmPassword ? "border-red-500" : ""}`}
+              />
+              {errors.confirmPassword && (
+                <p className="mt-1.5 text-sm text-red-600">
+                  {errors.confirmPassword}
+                </p>
+              )}
             </div>
 
             {/* ROLE */}
@@ -145,12 +245,19 @@ function SignupPage() {
               <select
                 id="role"
                 value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className={`${inputClass} cursor-pointer`}
+                onChange={(e) => {
+                  setRole(e.target.value);
+                  setErrors((prev) => ({ ...prev, role: "" }));
+                }}
+                aria-invalid={!!errors.role}
+                className={`${inputClass} cursor-pointer ${errors.role ? "border-red-500" : ""}`}
               >
                 <option value="client">Client</option>
                 <option value="therapist">Therapist</option>
               </select>
+              {errors.role && (
+                <p className="mt-1.5 text-sm text-red-600">{errors.role}</p>
+              )}
             </div>
 
             {/* SUBMIT BUTTON */}

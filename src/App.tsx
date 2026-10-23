@@ -14,6 +14,13 @@ import TherapistDetailPage from "./pages/TherapistDetailPage";
 import TherapistSessionsPage from "./pages/TherapistSessionsPage";
 import ProfileReminder from "./components/ProfileReminder";
 import Profile from "./pages/Profile";
+import TherapistRoute from "./components/TherapitRoute";
+import DashboardLayout from "./pages/dashboard/DashboardLayout";
+import Overview from "./pages/dashboard/Overview";
+import MyArticles from "./pages/dashboard/MyArticles";
+import MyAvailability from "./pages/dashboard/MyAvailability";
+import MySessions from "./pages/dashboard/MySessions";
+import ArticleForm from "./pages/dashboard/ArticleForm";
 
 function App() {
   const location = useLocation();
@@ -86,6 +93,17 @@ function App() {
         />
         <Route path="/therapists/:id" element={<TherapistDetailPage />} />
         <Route path="/therapists" element={<TherapistsPage />} />
+
+        <Route element={<TherapistRoute />}>
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route index element={<Overview />} />
+            <Route path="articles" element={<MyArticles />} />
+            <Route path="articles/new" element={<ArticleForm />} />
+            <Route path="articles/:id/edit" element={<ArticleForm />} />
+            <Route path="sessions" element={<MySessions />} />
+            <Route path="availability" element={<MyAvailability />} />
+          </Route>
+        </Route>
       </Routes>
     </>
   );

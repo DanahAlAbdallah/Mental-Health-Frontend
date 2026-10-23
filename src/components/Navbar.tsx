@@ -49,20 +49,11 @@ function Navbar() {
 
           {user ? (
             <>
-              {user.role === "therapist" && (
-                <NavLink to="/availability" className={navLinkClass}>
-                  My Availability
+              {user?.role === "therapist" && (
+                <NavLink to="/dashboard" className={navLinkClass}>
+                  Dashboard
                 </NavLink>
-                
               )}
-
-              {user.role === "therapist" && (
-                <NavLink to="/my-sessions" className={navLinkClass}>
-                  My Sessions
-                </NavLink>
-                
-              )}
-              
 
               <div className="relative">
                 <button

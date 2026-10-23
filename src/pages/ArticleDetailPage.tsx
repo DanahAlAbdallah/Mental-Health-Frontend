@@ -119,7 +119,7 @@ function ArticleDetailPage() {
         </div>
 
         {/* ACTIONS */}
-        {canManage && (
+        {/* {canManage && (
           <footer className="mt-4 border-t border-border pt-6">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <p className="text-sm text-muted">Manage this article</p>
@@ -163,10 +163,10 @@ function ArticleDetailPage() {
               </div>
             </div>
           </footer>
-        )}
+        )} */}
       </article>
 
-      {/* DELETE DIALOG */}
+      {/* DELETE DIALOG
       <ConfirmDialog
         open={openDialog}
         title="Delete article"
@@ -176,7 +176,7 @@ function ArticleDetailPage() {
       />
 
       {/* TOAST MESSAGE */}
-      {toast && <Toast message={toast} onClose={() => setToast(null)} />}
+      {/* {toast && <Toast message={toast} onClose={() => setToast(null)} />}  */}
     </div>
   );
 }

@@ -7,6 +7,11 @@ export async function fetchArticles(search?: string): Promise<Article[]> {
   return apiRequest<Article[]>(`/articles${query}`);
 }
 
+// GET SPECIFIC THERAPIST'S ARTICLES
+export async function fetchMyArticles(): Promise<Article[]> {
+  return apiRequest<Article[]>("/articles/mine", { auth: true });
+}
+
 // GET SPECIFIC ARTICLE BY ID
 export async function fetchArticleById(
   id: string,
@@ -26,9 +31,13 @@ export async function fetchLatestArticles(): Promise<Article[]> {
 }
 
 // CREATE NEW ARTICLE
-export async function createArticle(
-  data: Omit<Article, "id" | "createdAt">,
-): Promise<Article> {
+export type ArticleInput = {
+  title: string;
+  content: string;
+  category: string;
+};
+
+export async function createArticle(data: ArticleInput): Promise<Article> {
   return apiRequest<Article>("/articles", {
     method: "POST",
     auth: true,
@@ -37,10 +46,7 @@ export async function createArticle(
 }
 
 // UPDATE EXISTING ARTICLE
-export async function updateArticle(
-  id: string,
-  data: Omit<Article, "id" | "createdAt">,
-): Promise<Article> {
+export async function updateArticle(id: string, data: ArticleInput): Promise<Article> {
   return apiRequest<Article>(`/articles/${id}`, {
     method: "PUT",
     auth: true,

@@ -1,13 +1,9 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import ArticlesPage from "./pages/ArticlesPage";
-import ArticleDetailPage from "./pages/ArticleDetailPage";
 import LoginPage from "./pages/LoginPage";
-import AddArticlePage from "./pages/AddArticlePage";
 import RequireRole from "./components/RequireRole";
-import EditArticlePage from "./pages/EditArticlePage";
 import SignupPage from "./pages/SignupPage";
-import LandingPage from "./pages/LandingPage";
+import LandingPage from "./pages/Landing/LandingPage";
 import AvailabilityPage from "./pages/AvailabilityPage";
 import TherapistsPage from "./pages/TherapistsPage";
 import TherapistDetailPage from "./pages/TherapistDetailPage";
@@ -15,12 +11,16 @@ import TherapistSessionsPage from "./pages/TherapistSessionsPage";
 import ProfileReminder from "./components/ProfileReminder";
 import Profile from "./pages/Profile";
 import TherapistRoute from "./components/TherapitRoute";
-import DashboardLayout from "./pages/dashboard/DashboardLayout";
-import Overview from "./pages/dashboard/Overview";
-import MyArticles from "./pages/dashboard/MyArticles";
-import MyAvailability from "./pages/dashboard/MyAvailability";
-import MySessions from "./pages/dashboard/MySessions";
-import ArticleForm from "./pages/dashboard/ArticleForm";
+import DashboardLayout from "./pages/Dashboard/DashboardLayout";
+import Overview from "./pages/Dashboard/Overview";
+import MyArticles from "./pages/Dashboard/MyArticles";
+import MyAvailability from "./pages/Dashboard/MyAvailability";
+import MySessions from "./pages/Dashboard/MySessions";
+import ArticleForm from "./pages/Dashboard/ArticleForm";
+import AddArticlePage from "./pages/Articles/AddArticlePage";
+import ArticleDetailPage from "./pages/Articles/ArticleDetailPage";
+import ArticlesPage from "./pages/Articles/ArticlesPage";
+import EditArticlePage from "./pages/Articles/EditArticlePage";
 
 function App() {
   const location = useLocation();

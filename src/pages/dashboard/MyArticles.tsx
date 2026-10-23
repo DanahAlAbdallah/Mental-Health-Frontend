@@ -84,6 +84,12 @@ function MyArticles() {
 
               <div className="flex shrink-0 gap-3 text-sm">
                 <Link
+                  to={`/articles/${article.id}`}
+                  className="font-medium text-heading hover:text-primary"
+                >
+                  View
+                </Link>
+                <Link
                   to={`/dashboard/articles/${article.id}/edit`}
                   className="font-medium text-primary"
                 >

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { createArticle } from "../api/articles";
+import { useAuth } from "../../context/AuthContext";
+import { createArticle } from "../../api/articles";
+
 
 // STYLE SHARED BY THE TITLE AND CONTENT FIELDS, SO WE WRITE IT ONLY ONCE
 const fieldClass =
@@ -29,7 +30,6 @@ function AddArticlePage() {
       await createArticle({
         title,
         content,
-        author: user.name,
         category: "General",
       });
       navigate("/");

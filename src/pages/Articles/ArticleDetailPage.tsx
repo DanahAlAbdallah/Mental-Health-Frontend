@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { fetchArticleById, deleteArticle } from "../api/articles";
-import type { Article } from "../types";
-import ConfirmDialog from "../components/ConfirmDialog";
-import Toast from "../components/Toast";
+import { fetchArticleById, deleteArticle } from "../../api/articles";
+import { useAuth } from "../../context/AuthContext";
+import type { Article } from "../../types";
 
 // TURN THE DATE FROM THE DATABASE INTO SIMPLE TEXT, LIKE "Oct 16, 2026"
 function formatDate(date: string) {

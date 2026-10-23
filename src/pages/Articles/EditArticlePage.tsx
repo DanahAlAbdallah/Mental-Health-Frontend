@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchArticleById, updateArticle } from "../api/articles";
-import { useAuth } from "../context/AuthContext";
+import { fetchArticleById, updateArticle } from "../../api/articles";
+import { useAuth } from "../../context/AuthContext";
+
 
 // STYLE SHARED BY THE TITLE, CATEGORY AND CONTENT FIELDS, SO WE WRITE IT ONLY ONCE
 const fieldClass =
@@ -49,7 +50,6 @@ function EditArticlePage() {
       await updateArticle(id, {
         title,
         content,
-        author,
         category,
       });
 

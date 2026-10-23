@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { fetchArticles } from "../api/articles";
-import ArticleCard from "../components/ArticleCard";
-import Toast from "../components/Toast";
-import { useAuth } from "../context/AuthContext";
-import type { Article } from "../types";
+import { fetchArticles } from "../../api/articles";
+import ArticleCard from "../../components/ArticleCard";
+import Toast from "../../components/Toast";
+import { useAuth } from "../../context/AuthContext";
+import type { Article } from "../../types";
 
 // HOW LONG TO WAIT AFTER THE USER STOPS TYPING BEFORE SEARCHING (IN MILLISECONDS)
 const SEARCH_DELAY = 400;

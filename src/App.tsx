@@ -7,7 +7,6 @@ import LandingPage from "./pages/Landing/LandingPage";
 import AvailabilityPage from "./pages/AvailabilityPage";
 import TherapistsPage from "./pages/TherapistsPage";
 import TherapistDetailPage from "./pages/TherapistDetailPage";
-import TherapistSessionsPage from "./pages/TherapistSessionsPage";
 import ProfileReminder from "./components/ProfileReminder";
 import Profile from "./pages/Profile";
 import TherapistRoute from "./components/TherapitRoute";
@@ -21,6 +20,8 @@ import AddArticlePage from "./pages/Articles/AddArticlePage";
 import ArticleDetailPage from "./pages/Articles/ArticleDetailPage";
 import ArticlesPage from "./pages/Articles/ArticlesPage";
 import EditArticlePage from "./pages/Articles/EditArticlePage";
+import ClientRoute from "./components/ClientRoute";
+import MyBookings from "./pages/MyBookings";
 
 function App() {
   const location = useLocation();
@@ -83,17 +84,11 @@ function App() {
         />
 
         {/* THERAPIST SESSIONS */}
-        <Route
-          path="/my-sessions"
-          element={
-            <RequireRole allowed={["therapist"]}>
-              <TherapistSessionsPage />
-            </RequireRole>
-          }
-        />
+
         <Route path="/therapists/:id" element={<TherapistDetailPage />} />
         <Route path="/therapists" element={<TherapistsPage />} />
 
+        {/* THERAPIST ROUTES */}
         <Route element={<TherapistRoute />}>
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<Overview />} />
@@ -103,6 +98,11 @@ function App() {
             <Route path="sessions" element={<MySessions />} />
             <Route path="availability" element={<MyAvailability />} />
           </Route>
+        </Route>
+
+        {/* CLIENT ROUTES */}
+        <Route element={<ClientRoute />}>
+          <Route path="/my-sessions" element={<MyBookings />} />
         </Route>
       </Routes>
     </>

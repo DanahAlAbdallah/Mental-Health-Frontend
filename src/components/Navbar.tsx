@@ -1,45 +1,93 @@
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import {
+  ChevronDown,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  User,
+  X,
+} from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { useState } from "react";
 import LOGO from "../assets/LOGO-TRNS.png";
+
 function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const accountRef = useRef<HTMLDivElement>(null);
 
   function handleLogout() {
     logout();
     navigate("/");
   }
 
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
+  // CLOSE THE ACCOUNT DROPDOWN WHEN CLICKING OUTSIDE OR PRESSING ESCAPE
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (!accountRef.current?.contains(e.target as Node)) {
+        setSettingsOpen(false);
+      }
+    }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setSettingsOpen(false);
+    }
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, []);
 
+  // DESKTOP LINK WITH AN ANIMATED LINE UNDER THE ACTIVE PAGE
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+    `relative px-3 py-2 text-sm font-medium transition-colors duration-200
+     after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-left
+     after:rounded-full after:bg-primary after:transition-transform after:duration-300 ${
+       isActive
+         ? "text-primary after:scale-x-100"
+         : "text-heading/70 hover:text-heading after:scale-x-0 hover:after:scale-x-50"
+     }`;
+
+  // MOBILE LINK WITH A BAR ON THE LEFT FOR THE ACTIVE PAGE
+  const mobileLinkClass = ({ isActive }: { isActive: boolean }) =>
+    `rounded-xl border-l-4 px-4 py-3 text-sm font-medium transition-colors ${
       isActive
-        ? "bg-accent text-heading"
-        : "text-heading hover:bg-background-soft"
+        ? "border-primary bg-primary/10 text-primary"
+        : "border-transparent text-heading hover:bg-background-soft"
     }`;
 
+  const avatar = user?.avatarUrl ? (
+    <img src={user.avatarUrl} alt="" className="h-full w-full object-cover" />
+  ) : (
+    <span className="text-sm font-semibold text-button-text">
+      {user?.name?.charAt(0).toUpperCase()}
+    </span>
+  );
+
   return (
-    <nav className="relative z-50 bg-background px-5 py-4 shadow-sm sm:px-8 lg:px-10">
+    <nav className="sticky top-0 z-50 border-b border-border bg-background/85 px-5 py-3 backdrop-blur-md sm:px-8 lg:px-10">
       <div className="mx-auto flex max-w-7xl items-center justify-between">
-        {/* Logo */}
+        {/* LOGO */}
         <Link
           to="/"
           onClick={() => setMenuOpen(false)}
           className="flex items-center"
         >
-          <div className="h-12 w-36 flex items-center overflow-hidden">
+          <div className="flex h-12 w-36 items-center overflow-hidden">
             <img
               src={LOGO}
               alt="Athar Logo"
-              className="h-24 w-30 max-w-none object-contain -ml-2"
+              className="-ml-2 h-24 w-30 max-w-none object-contain"
             />
           </div>
         </Link>
-        {/* Desktop Navigation */}
-        <div className="hidden items-center gap-6 md:flex">
+
+        {/* DESKTOP NAVIGATION */}
+        <div className="hidden items-center gap-2 md:flex">
           <NavLink to="/articles" className={navLinkClass}>
             Articles
           </NavLink>
@@ -49,92 +97,107 @@ function Navbar() {
 
           {user ? (
             <>
-              {user?.role === "therapist" && (
+              {user.role === "client" && (
+                <NavLink to="/my-sessions" className={navLinkClass}>
+                  My sessions
+                </NavLink>
+              )}
+              {user.role === "therapist" && (
                 <NavLink to="/dashboard" className={navLinkClass}>
                   Dashboard
                 </NavLink>
               )}
 
-              <div className="relative">
+              {/* ACCOUNT MENU */}
+              <div ref={accountRef} className="relative ml-3">
                 <button
                   type="button"
                   onClick={() => setSettingsOpen((open) => !open)}
-                  aria-label="Open account settings"
+                  aria-label="Open account menu"
                   aria-expanded={settingsOpen}
-                  className={`flex h-10 w-10 items-center justify-center rounded-full border transition-colors ${
+                  className={`flex items-center gap-2 rounded-full border py-1 pl-1 pr-2.5 transition-colors ${
                     settingsOpen
                       ? "border-primary bg-background-soft"
-                      : "border-border bg-background hover:bg-background-soft"
+                      : "border-border hover:bg-background-soft"
                   }`}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="21"
-                    height="21"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <circle cx="12" cy="12" r="3" />
-                    <path d="m19.4 15 .1.1a1.7 1.7 0 0 1-2.4 2.4l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.2a1.7 1.7 0 0 1-3.4 0v-.2a1.7 1.7 0 0 0-2.9-1.2l-.1.1a1.7 1.7 0 0 1-2.4-2.4l.1-.1a1.7 1.7 0 0 0-1.2-2.9H4a1.7 1.7 0 0 1 0-3.4h.2a1.7 1.7 0 0 0 1.2-2.9l-.1-.1a1.7 1.7 0 0 1 2.4-2.4l.1.1a1.7 1.7 0 0 0 2.9-1.2V2.9a1.7 1.7 0 0 1 3.4 0v.2a1.7 1.7 0 0 0 2.9 1.2l.1-.1a1.7 1.7 0 0 1 2.4 2.4l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.2a1.7 1.7 0 0 1 0 3.4h-.2a1.7 1.7 0 0 0-1.2 2.9Z" />
-                  </svg>
+                  <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-primary">
+                    {avatar}
+                  </span>
+                  <ChevronDown
+                    className={`h-4 w-4 text-muted transition-transform duration-200 ${
+                      settingsOpen ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
 
                 {settingsOpen && (
-                  <div className="absolute right-0 top-full mt-3 w-56 rounded-2xl border border-border bg-surface p-2 shadow-lg">
+                  <div className="absolute right-0 top-full mt-3 w-60 rounded-2xl border border-border bg-surface p-2 shadow-lg">
                     <div className="border-b border-border px-3 py-3">
-                      <p className="font-semibold text-heading">{user.name}</p>
-                      <p className="mt-1 text-xs capitalize text-muted">
+                      <p className="truncate font-semibold text-heading">
+                        {user.name}
+                      </p>
+                      <p className="mt-0.5 text-xs capitalize text-muted">
                         {user.role}
                       </p>
                     </div>
 
-                    <Link
-                      to="/profile"
-                      onClick={() => setSettingsOpen(false)}
-                      className="mt-2 block rounded-xl px-3 py-2.5 text-sm text-heading transition-colors hover:bg-background-soft"
-                    >
-                      👤 My Profile
-                    </Link>
+                    <div className="mt-2 flex flex-col gap-0.5">
+                      <Link
+                        to="/profile"
+                        onClick={() => setSettingsOpen(false)}
+                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-heading transition-colors hover:bg-background-soft"
+                      >
+                        <User className="h-4 w-4 text-muted" />
+                        My profile
+                      </Link>
 
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSettingsOpen(false);
-                        handleLogout();
-                      }}
-                      className="w-full rounded-xl px-3 py-2.5 text-left text-sm text-heading transition-colors hover:bg-accent/50"
-                    >
-                      ↪ Log out
-                    </button>
+                      {user.role === "therapist" && (
+                        <Link
+                          to="/dashboard"
+                          onClick={() => setSettingsOpen(false)}
+                          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-heading transition-colors hover:bg-background-soft"
+                        >
+                          <LayoutDashboard className="h-4 w-4 text-muted" />
+                          Dashboard
+                        </Link>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSettingsOpen(false);
+                          handleLogout();
+                        }}
+                        className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-heading transition-colors hover:bg-accent/50"
+                      >
+                        <LogOut className="h-4 w-4 text-muted" />
+                        Log out
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
             </>
           ) : (
-            <>
+            <div className="ml-3 flex items-center gap-2">
               <Link
                 to="/login"
-                className="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-button-text transition-colors hover:bg-accent-hover"
+                className="rounded-full px-5 py-2 text-sm font-semibold text-heading transition-colors hover:bg-background-soft"
               >
                 Login
               </Link>
-
               <Link
                 to="/signup"
-                className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-button-text transition-colors hover:bg-primary-hover"
+                className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-button-text shadow-sm transition-all hover:-translate-y-0.5 hover:bg-primary-hover"
               >
-                Sign Up
+                Sign up
               </Link>
-            </>
+            </div>
           )}
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* MOBILE MENU BUTTON */}
         <button
           type="button"
           onClick={() => setMenuOpen((open) => !open)}
@@ -142,119 +205,100 @@ function Navbar() {
             menuOpen ? "Close navigation menu" : "Open navigation menu"
           }
           aria-expanded={menuOpen}
-          className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background-soft text-heading transition-colors hover:bg-primary/30 md:hidden"
+          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-border bg-background-soft text-heading transition-colors hover:bg-primary/20 md:hidden"
         >
-          {menuOpen ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="23"
-              height="23"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="23"
-              height="23"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M4 6h16" />
-              <path d="M4 12h16" />
-              <path d="M4 18h16" />
-            </svg>
-          )}
+          {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
-      {/* Mobile Dropdown Menu */}
+      {/* MOBILE DROPDOWN */}
       {menuOpen && (
-        <div className="absolute left-0 right-0 top-full border-t border-border bg-background px-5 py-5 shadow-lg md:hidden">
-          <div className="mx-auto flex max-w-7xl flex-col gap-2">
-            <Link
+        <div className="absolute left-0 right-0 top-full border-b border-border bg-background px-5 py-5 shadow-lg md:hidden">
+          <div className="mx-auto flex max-w-7xl flex-col gap-1">
+            <NavLink
               to="/articles"
               onClick={() => setMenuOpen(false)}
-              className="rounded-lg px-4 py-3 text-sm font-medium text-heading transition-colors hover:bg-background-soft"
+              className={mobileLinkClass}
             >
               Articles
-            </Link>
-
-            <Link
+            </NavLink>
+            <NavLink
               to="/therapists"
               onClick={() => setMenuOpen(false)}
-              className="rounded-lg px-4 py-3 text-sm font-medium text-heading transition-colors hover:bg-background-soft"
+              className={mobileLinkClass}
             >
               Therapists
-            </Link>
+            </NavLink>
 
             {user ? (
               <>
-                {user.role === "therapist" && (
-                  <Link
-                    to="/availability"
+                {user.role === "client" && (
+                  <NavLink
+                    to="/my-sessions"
                     onClick={() => setMenuOpen(false)}
-                    className="rounded-lg px-4 py-3 text-sm font-medium text-heading transition-colors hover:bg-background-soft"
+                    className={mobileLinkClass}
                   >
-                    My Availability
-                  </Link>
+                    My sessions
+                  </NavLink>
+                )}
+                {user.role === "therapist" && (
+                  <NavLink
+                    to="/dashboard"
+                    onClick={() => setMenuOpen(false)}
+                    className={mobileLinkClass}
+                  >
+                    Dashboard
+                  </NavLink>
                 )}
 
-                <div className="my-2 border-t border-border" />
+                <div className="my-3 border-t border-border" />
 
-                <p className="px-4 py-2 text-sm text-muted">
-                  {user.name} · {user.role}
-                </p>
+                <div className="flex items-center gap-3 px-4 pb-2">
+                  <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-primary">
+                    {avatar}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-heading">
+                      {user.name}
+                    </p>
+                    <p className="text-xs capitalize text-muted">{user.role}</p>
+                  </div>
+                </div>
 
-                <Link
+                <NavLink
                   to="/profile"
                   onClick={() => setMenuOpen(false)}
-                  className="rounded-full border border-border bg-background-soft px-4 py-3 text-center text-sm font-semibold text-heading transition-colors hover:bg-primary/30"
+                  className={mobileLinkClass}
                 >
-                  👤 My Profile
-                </Link>
+                  My profile
+                </NavLink>
 
                 <button
                   onClick={() => {
                     setMenuOpen(false);
                     handleLogout();
                   }}
-                  className="rounded-full bg-accent px-4 py-3 text-sm font-semibold text-button-text transition-colors hover:bg-accent-hover"
+                  className="mt-2 cursor-pointer rounded-full bg-accent px-4 py-3 text-sm font-semibold text-button-text transition-colors hover:bg-accent-hover"
                 >
-                  Logout
+                  Log out
                 </button>
               </>
             ) : (
               <>
-                <div className="my-2 border-t border-border" />
-
+                <div className="my-3 border-t border-border" />
                 <Link
                   to="/login"
                   onClick={() => setMenuOpen(false)}
-                  className="rounded-full bg-accent px-4 py-3 text-center text-sm font-semibold text-button-text transition-colors hover:bg-accent-hover"
+                  className="rounded-full border border-border px-4 py-3 text-center text-sm font-semibold text-heading transition-colors hover:bg-background-soft"
                 >
                   Login
                 </Link>
-
                 <Link
                   to="/signup"
                   onClick={() => setMenuOpen(false)}
                   className="rounded-full bg-primary px-4 py-3 text-center text-sm font-semibold text-button-text transition-colors hover:bg-primary-hover"
                 >
-                  Sign Up
+                  Sign up
                 </Link>
               </>
             )}

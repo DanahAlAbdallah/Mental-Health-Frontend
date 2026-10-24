@@ -16,9 +16,10 @@ export async function fetchMySessions(): Promise<Session[]> {
 }
 
 // UPDATING SESSION STATUS
+
 export async function updateSessionStatus(
   sessionId: string,
-  status: "confirmed" | "rejected",
+  status: "confirmed" | "rejected" | "cancelled",
 ): Promise<Session> {
   return apiRequest<Session>(`/sessions/${sessionId}`, {
     method: "PATCH",

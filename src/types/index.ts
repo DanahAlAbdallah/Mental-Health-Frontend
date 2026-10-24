@@ -59,7 +59,8 @@ export interface Session {
   date: string;
   startTime: string;
   endTime: string;
-  status: string;
+  status: "pending" | "confirmed" | "rejected" | "cancelled";
   createdAt: string;
+  therapistName?: string | null; // add
+  patientName?: string | null; // add
 }
-

@@ -21,6 +21,11 @@ export async function fetchTherapistSlots(
   return apiRequest<AvailabilitySlot[]>(`/availability/${therapistId}`);
 }
 
+// GET ALL MY SLOTS, BOOKED OR NOT (THERAPIST ONLY)
+export async function fetchMySlots(): Promise<AvailabilitySlot[]> {
+  return apiRequest<AvailabilitySlot[]>("/availability/me", { auth: true });
+}
+
 // DELETE EXISTING SLOT
 export async function deleteSlot(id: string): Promise<void> {
   return apiRequest<void>(`/availability/${id}`, {

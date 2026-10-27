@@ -22,6 +22,7 @@ import ArticlesPage from "./pages/Articles/ArticlesPage";
 import EditArticlePage from "./pages/Articles/EditArticlePage";
 import ClientRoute from "./components/ClientRoute";
 import MyBookings from "./pages/MyBookings";
+import RequireAuth from "./components/RequireAuth";
 
 function App() {
   const location = useLocation();
@@ -43,7 +44,9 @@ function App() {
         {/* SIGNUP */}
         <Route path="/signup" element={<SignupPage />} />
 
-        <Route path="/profile" element={<Profile />} />
+        <Route element={<RequireAuth />}>
+          <Route path="/profile" element={<Profile />} />
+        </Route>
         {/* --------------------------------ARTICLES ROUTES------------------------- */}
 
         {/* MAIN ARTICLES PAGE */}

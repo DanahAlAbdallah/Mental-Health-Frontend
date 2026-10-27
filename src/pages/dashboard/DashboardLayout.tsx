@@ -61,7 +61,7 @@ function DashboardLayout() {
                 className={({ isActive }) =>
                   `group flex items-center gap-3 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
                     isActive
-                      ? "bg-primary text-button-text shadow-sm"
+                      ? "text-white bg-primary text-button-text shadow-sm"
                       : "text-heading/70 hover:bg-primary/10 hover:text-primary"
                   }`
                 }

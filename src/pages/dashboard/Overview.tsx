@@ -257,7 +257,9 @@ function Overview() {
     summary.push("You have no sessions scheduled yet.");
   }
   if (pending.length > 0) {
-    summary.push(`${plural(pending.length, "request")} waiting for your reply.`);
+    summary.push(
+      `${plural(pending.length, "request")} waiting for your reply.`,
+    );
   }
 
   const firstName = user?.name?.split(" ")[0] ?? "";
@@ -270,15 +272,17 @@ function Overview() {
         <div className="pointer-events-none absolute -bottom-16 right-24 h-40 w-40 rounded-full bg-white/10" />
 
         <div className="relative">
-          <p className="text-sm font-medium opacity-80">{greeting()}</p>
-          <h1 className="mt-1 text-2xl font-bold sm:text-3xl">
+          <p className="text-white text-sm font-medium opacity-80">
+            {greeting()}
+          </p>
+          <h1 className="text-white mt-1 text-2xl font-bold sm:text-3xl">
             Welcome back, {firstName}
           </h1>
-          <p className="mt-2 max-w-xl text-sm opacity-90 sm:text-base">
+          <p className=" text-white mt-2 max-w-xl text-sm opacity-90 sm:text-base">
             {summary.join(" ")}
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="text-white mt-6 flex flex-wrap gap-3">
             <Link
               to="/dashboard/availability"
               className="inline-flex items-center gap-2 rounded-xl bg-white/20 px-4 py-2.5 text-sm font-semibold backdrop-blur transition-colors hover:bg-white/30"

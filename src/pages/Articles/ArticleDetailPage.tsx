@@ -278,7 +278,7 @@ function ArticleDetailPage() {
           </div>
 
           {/* CALL TO ACTION */}
-          <section className="relative mt-8 overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-primary-hover p-7 text-button-text shadow-md sm:p-9">
+          <section className="text-white relative mt-8 overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-primary-hover p-7 text-button-text shadow-md sm:p-9">
             <div className="pointer-events-none absolute -right-8 -top-8 h-36 w-36 rounded-full bg-white/10" />
             <div className="relative">
               <h2 className="text-xl font-bold sm:text-2xl">

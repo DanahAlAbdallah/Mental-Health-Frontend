@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth  } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { fetchMyProfile, updateMyProfile, updateMyUser } from "../api/users";
 import type { TherapistProfile } from "../types";
 
@@ -130,13 +130,13 @@ function Profile() {
 
     try {
       // Update the user's general account information.
-     const updatedUser = await updateMyUser({
-  name: form.name.trim(),
-  phone: form.phone.trim() || null,
-  avatarUrl: form.avatarUrl.trim() || null,
-});
+      const updatedUser = await updateMyUser({
+        name: form.name.trim(),
+        phone: form.phone.trim() || null,
+        avatarUrl: form.avatarUrl.trim() || null,
+      });
 
-updateUser(updatedUser);
+      updateUser(updatedUser);
 
       // Update therapist-specific information separately.
       if (isTherapist) {
@@ -200,7 +200,7 @@ updateUser(updatedUser);
       <div className="mx-auto max-w-3xl">
         <header className="mb-8">
           <p className="mb-2 text-sm font-medium text-primary">
-            YOUR ATHAR ACCOUNT
+            YOUR EUPHORIA ACCOUNT
           </p>
 
           <h1 className="text-3xl font-bold text-heading sm:text-4xl">

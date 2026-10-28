@@ -40,7 +40,13 @@ function TherapistsPage() {
   }, []);
 
   if (loading) {
-    return <div className="p-8">Loading therapists...</div>;
+    return  <div
+            className="flex flex-col items-center justify-center py-20 text-center"
+            role="status"
+          >
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-border border-t-primary" />
+            <p className="mt-4 text-sm text-muted">Loading therapists...</p>
+          </div>;
   }
 
   // THERAPISTS PAGE DESIGN

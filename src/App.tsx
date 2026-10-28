@@ -10,13 +10,12 @@ import TherapistDetailPage from "./pages/TherapistDetailPage";
 import ProfileReminder from "./components/ProfileReminder";
 import Profile from "./pages/Profile";
 import TherapistRoute from "./components/TherapitRoute";
-import DashboardLayout from "./pages/Dashboard/DashboardLayout";
-import Overview from "./pages/Dashboard/Overview";
-import MyArticles from "./pages/Dashboard/MyArticles";
-import MyAvailability from "./pages/Dashboard/MyAvailability";
-import MySessions from "./pages/Dashboard/MySessions";
-import ArticleForm from "./pages/Dashboard/ArticleForm";
-import AddArticlePage from "./pages/Articles/AddArticlePage";
+import DashboardLayout from "./pages/dashboard/DashboardLayout";
+import Overview from "./pages/dashboard/Overview";
+import MyArticles from "./pages/dashboard/MyArticles";
+import MyAvailability from "./pages/dashboard/MyAvailability";
+import MySessions from "./pages/dashboard/MySessions";
+import ArticleForm from "./pages/dashboard/ArticleForm";
 import ArticleDetailPage from "./pages/Articles/ArticleDetailPage";
 import ArticlesPage from "./pages/Articles/ArticlesPage";
 import EditArticlePage from "./pages/Articles/EditArticlePage";
@@ -56,14 +55,14 @@ function App() {
         <Route path="/articles/:id" element={<ArticleDetailPage />} />
 
         {/* ADD NEW ARTICLE BY THERAPIST OR ADMIN */}
-        <Route
+        {/* <Route
           path="/articles/new"
           element={
             <RequireRole allowed={["therapist", "admin"]}>
               <AddArticlePage />
             </RequireRole>
           }
-        />
+        /> */}
 
         {/* EDIT ARTICLE BY THERAPIST OR ADMIN */}
         <Route

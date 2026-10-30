@@ -31,7 +31,7 @@ function DashboardLayout() {
       <aside className="md:sticky md:top-24 md:w-64 md:shrink-0">
         <div className="rounded-2xl md:border md:border-primary/15 md:p-4 md:shadow-sm">
           {/* PROFILE HEADER (DESKTOP ONLY) */}
-          <div className="mb-4 hidden items-center gap-3 border-b border-primary/15 pb-4 md:flex">
+          <div className=" mb-4 hidden items-center gap-3 border-b border-primary/15 pb-4 md:flex">
             {user?.avatarUrl ? (
               <img
                 src={user.avatarUrl}
@@ -39,7 +39,7 @@ function DashboardLayout() {
                 className="h-11 w-11 rounded-full object-cover"
               />
             ) : (
-              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-base font-semibold text-button-text">
+              <div className="text-white flex h-11 w-11 items-center justify-center rounded-full bg-primary text-base font-semibold text-button-text">
                 {user?.name?.charAt(0).toUpperCase()}
               </div>
             )}

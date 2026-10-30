@@ -24,7 +24,7 @@ function Hero() {
 
         <Link
           to="/therapists"
-          className="inline-block rounded-full bg-accent px-6 py-3 font-semibold text-button-text transition-colors hover:bg-accent-hover"
+          className="inline-block rounded-full bg-accent px-6 py-3 font-semibold text-white transition-colors hover:bg-accent-hover"
         >
           Book your session →
         </Link>

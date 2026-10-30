@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
+  ArrowRight,
   ChevronDown,
   LayoutDashboard,
   LogOut,
@@ -60,10 +61,14 @@ function Navbar() {
         : "border-transparent text-heading hover:bg-background-soft"
     }`;
 
+  // SIGN UP BUTTON: SOFT GRADIENT PILL WITH AN ARROW THAT SLIDES ON HOVER
+  // SIGN UP BUTTON: YELLOW PILL WITH AN ARROW THAT SLIDES ON HOVER
+  const signupButtonClass =
+    "group inline-flex items-center justify-center gap-1.5 rounded-full bg-accent px-5 py-2 text-sm font-semibold text-heading shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2";
   const avatar = user?.avatarUrl ? (
     <img src={user.avatarUrl} alt="" className="h-full w-full object-cover" />
   ) : (
-    <span className="text-sm font-semibold text-button-text">
+    <span className="text-white text-sm font-semibold text-button-text">
       {user?.name?.charAt(0).toUpperCase()}
     </span>
   );
@@ -80,7 +85,7 @@ function Navbar() {
           <div className="flex h-12 w-36 items-center overflow-hidden">
             <img
               src={LOGO}
-              alt="Athar Logo"
+              alt="EUPHORIA Logo"
               className="-ml-2 h-24 w-30 max-w-none object-contain"
             />
           </div>
@@ -180,23 +185,25 @@ function Navbar() {
               </div>
             </>
           ) : (
-            <div className="ml-3 flex items-center gap-2">
-              <Link
-                to="/login"
-                className="rounded-full px-5 py-2 text-sm font-semibold text-heading transition-colors hover:bg-background-soft"
-              >
+            <>
+              {/* SMALL DIVIDER BETWEEN THE PAGES AND THE ACCOUNT ACTIONS */}
+              <span aria-hidden="true" className="mx-2 h-5 w-px bg-border" />
+
+              {/* LOGIN: SAME ANIMATED LINE AS THE OTHER LINKS */}
+              <NavLink to="/login" className={navLinkClass}>
                 Login
-              </Link>
-              <Link
-                to="/signup"
-                className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-button-text shadow-sm transition-all hover:-translate-y-0.5 hover:bg-primary-hover"
-              >
+              </NavLink>
+
+              {/* SIGN UP: GRADIENT PILL */}
+              <Link to="/signup" className={`ml-1 ${signupButtonClass}`}>
                 Sign up
+                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Link>
-            </div>
+            </>
           )}
         </div>
 
+        {/* MOBILE MENU BUTTON */}
         {/* MOBILE MENU BUTTON */}
         <button
           type="button"
@@ -205,9 +212,30 @@ function Navbar() {
             menuOpen ? "Close navigation menu" : "Open navigation menu"
           }
           aria-expanded={menuOpen}
-          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-border bg-background-soft text-heading transition-colors hover:bg-primary/20 md:hidden"
+          className="group flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-primary/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 md:hidden"
         >
-          {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          <span className="relative block h-4 w-5 ">
+            {/* TOP LINE */}
+            <span
+              className={`bg-primary absolute left-0 h-0.5 w-5 rounded-full  transition-all duration-300 ${
+                menuOpen ? "top-1/2 -translate-y-1/2 rotate-45" : "top-0"
+              }`}
+            />
+            {/* MIDDLE LINE (SHORTER, GROWS ON HOVER) */}
+            <span
+              className={`bg-accent absolute left-0 top-1/2 h-0.5 -translate-y-1/2 rounded-full  transition-all duration-300 ${
+                menuOpen ? "w-0 opacity-0" : "w-3.5 opacity-100 group-hover:w-5"
+              }`}
+            />
+            {/* BOTTOM LINE */}
+            <span
+              className={`bg-primary absolute left-0 h-0.5 w-5 rounded-full  transition-all duration-300 ${
+                menuOpen
+                  ? "top-1/2 -translate-y-1/2 -rotate-45"
+                  : "top-full -translate-y-full"
+              }`}
+            />
+          </span>
         </button>
       </div>
 
@@ -286,19 +314,24 @@ function Navbar() {
             ) : (
               <>
                 <div className="my-3 border-t border-border" />
-                <Link
+
+                {/* LOGIN: SAME LEFT BAR STYLE AS THE OTHER MOBILE LINKS */}
+                <NavLink
                   to="/login"
                   onClick={() => setMenuOpen(false)}
-                  className="rounded-full border border-border px-4 py-3 text-center text-sm font-semibold text-heading transition-colors hover:bg-background-soft"
+                  className={mobileLinkClass}
                 >
                   Login
-                </Link>
+                </NavLink>
+
+                {/* SIGN UP: FULL WIDTH GRADIENT PILL */}
                 <Link
                   to="/signup"
                   onClick={() => setMenuOpen(false)}
-                  className="rounded-full bg-primary px-4 py-3 text-center text-sm font-semibold text-button-text transition-colors hover:bg-primary-hover"
+                  className={`mt-2 py-3 ${signupButtonClass}`}
                 >
                   Sign up
+                  <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </Link>
               </>
             )}

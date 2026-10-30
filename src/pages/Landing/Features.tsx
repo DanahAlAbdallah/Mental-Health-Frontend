@@ -30,7 +30,7 @@ function Features() {
             <div key={step.title} className="flex flex-col items-center">
               <div className="relative mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-primary/15 text-4xl">
                 <span aria-hidden="true">{step.icon}</span>
-                <span className="absolute -right-1 -top-1 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white">
+                <span className="absolute -right-1 -top-1 flex h-7 w-7 items-center justify-center rounded-full bg-accent text-sm font-semibold text-white">
                   {i + 1}
                 </span>
               </div>
@@ -44,7 +44,7 @@ function Features() {
         {/* CTA -> CALL TO ACTION */}
         <Link
           to="/signup"
-          className="mt-12 inline-block rounded-full bg-accent px-8 py-3 font-semibold text-button-text transition hover:bg-accent-hover"
+          className="mt-12 inline-block rounded-full bg-accent px-8 py-3 font-semibold text-white transition hover:bg-accent-hover"
         >
           Start your journey →
         </Link>

@@ -5,9 +5,7 @@ import {
   ChevronDown,
   LayoutDashboard,
   LogOut,
-  Menu,
   User,
-  X,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import LOGO from "../assets/LOGO-TRNS.png";

@@ -85,7 +85,7 @@ function ArticlesPage() {
 
           {canAddArticle && (
             <Link
-              to="/articles/new"
+              to="/dashboard/articles/new"
               className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-medium text-white transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
             >
               <span className="text-lg leading-none">+</span>

@@ -4,7 +4,6 @@ import LoginPage from "./pages/LoginPage";
 import RequireRole from "./components/RequireRole";
 import SignupPage from "./pages/SignupPage";
 import LandingPage from "./pages/Landing/LandingPage";
-import AvailabilityPage from "./pages/AvailabilityPage";
 import TherapistsPage from "./pages/TherapistsPage";
 import TherapistDetailPage from "./pages/TherapistDetailPage";
 import ProfileReminder from "./components/ProfileReminder";
@@ -18,7 +17,6 @@ import MySessions from "./pages/dashboard/MySessions";
 import ArticleForm from "./pages/dashboard/ArticleForm";
 import ArticleDetailPage from "./pages/Articles/ArticleDetailPage";
 import ArticlesPage from "./pages/Articles/ArticlesPage";
-import EditArticlePage from "./pages/Articles/EditArticlePage";
 import ClientRoute from "./components/ClientRoute";
 import MyBookings from "./pages/MyBookings";
 import RequireAuth from "./components/RequireAuth";
@@ -54,36 +52,6 @@ function App() {
         {/* ARTICLE DETAIL PAGE */}
         <Route path="/articles/:id" element={<ArticleDetailPage />} />
 
-        {/* ADD NEW ARTICLE BY THERAPIST OR ADMIN */}
-        {/* <Route
-          path="/articles/new"
-          element={
-            <RequireRole allowed={["therapist", "admin"]}>
-              <AddArticlePage />
-            </RequireRole>
-          }
-        /> */}
-
-        {/* EDIT ARTICLE BY THERAPIST OR ADMIN */}
-        <Route
-          path="/articles/:id/edit"
-          element={
-            <RequireRole allowed={["therapist", "admin"]}>
-              <EditArticlePage />
-            </RequireRole>
-          }
-        />
-
-        {/* --------------------------------THERAPIST ROUTES------------------------- */}
-        {/* AVAILABILITY */}
-        <Route
-          path="/availability"
-          element={
-            <RequireRole allowed={["therapist"]}>
-              <AvailabilityPage />
-            </RequireRole>
-          }
-        />
 
         {/* THERAPIST SESSIONS */}
 

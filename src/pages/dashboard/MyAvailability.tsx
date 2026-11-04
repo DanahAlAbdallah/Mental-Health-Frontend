@@ -124,9 +124,9 @@ function Chip({
     <button
       type="button"
       onClick={onClick}
-      className={`cursor-pointer rounded-full border px-4 py-1.5 text-sm font-medium transition-colors ${
+      className={` cursor-pointer rounded-full border px-4 py-1.5 text-sm font-medium transition-colors ${
         active
-          ? "border-primary bg-primary text-button-text"
+          ? "border-primary bg-primary text-white"
           : "border-border bg-background text-heading hover:border-primary hover:text-primary"
       }`}
     >
@@ -450,7 +450,7 @@ function MyAvailability() {
         <button
           type="submit"
           disabled={saving}
-          className="mt-5 cursor-pointer rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-button-text shadow-sm transition hover:-translate-y-0.5 hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-70"
+          className="mt-5 cursor-pointer rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-70"
         >
           {saving ? "Adding..." : weeks > 1 ? `Add ${weeks} slots` : "Add slot"}
         </button>

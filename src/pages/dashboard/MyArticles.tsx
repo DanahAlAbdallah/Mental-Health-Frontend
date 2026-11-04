@@ -210,7 +210,7 @@ function MyArticles() {
         </div>
         <Link
           to="/dashboard/articles/new"
-          className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-button-text shadow-sm transition hover:-translate-y-0.5 hover:bg-primary-hover"
+          className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-primary-hover"
         >
           <Plus className="h-4 w-4" />
           New article

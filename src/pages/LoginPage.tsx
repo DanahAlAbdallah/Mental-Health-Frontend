@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import yellowLineVideo from "../assets/yellow_line_loop.webm";
 
@@ -107,7 +107,12 @@ function LoginPage() {
                   type="button"
                   className="text-xs text-muted cursor-pointer hover:text-primary-hover transition"
                 >
-                  Forgot password?
+                  <Link
+                    to="/forgot-password"
+                    className="text-xs text-indigo-400 hover:underline"
+                  >
+                    Forgot Password?
+                  </Link>
                 </button>
               </div>
               <input

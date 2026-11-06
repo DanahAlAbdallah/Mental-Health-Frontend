@@ -1,7 +1,6 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import LoginPage from "./pages/LoginPage";
-import RequireRole from "./components/RequireRole";
 import SignupPage from "./pages/SignupPage";
 import LandingPage from "./pages/Landing/LandingPage";
 import TherapistsPage from "./pages/TherapistsPage";
@@ -20,6 +19,8 @@ import ArticlesPage from "./pages/Articles/ArticlesPage";
 import ClientRoute from "./components/ClientRoute";
 import MyBookings from "./pages/MyBookings";
 import RequireAuth from "./components/RequireAuth";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const location = useLocation();
@@ -41,6 +42,12 @@ function App() {
         {/* SIGNUP */}
         <Route path="/signup" element={<SignupPage />} />
 
+        {/* FORGET PASSWORD */}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        {/* RESET PASSWORD */}
+        <Route path="/reset-password" element={<ResetPassword />} />
+
         <Route element={<RequireAuth />}>
           <Route path="/profile" element={<Profile />} />
         </Route>
@@ -51,7 +58,6 @@ function App() {
 
         {/* ARTICLE DETAIL PAGE */}
         <Route path="/articles/:id" element={<ArticleDetailPage />} />
-
 
         {/* THERAPIST SESSIONS */}
 

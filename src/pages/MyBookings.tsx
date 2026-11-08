@@ -5,7 +5,6 @@ import { fetchMySessions, updateSessionStatus } from "../api/sessions";
 import type { Session } from "../types";
 import { Link } from "react-router-dom";
 
-
 type Tab = "pending" | "upcoming" | "history";
 
 // A SESSION IS OVER WHEN ITS END TIME HAS PASSED
@@ -255,6 +254,13 @@ function MyBookings() {
                 <p className="mt-4 rounded-xl bg-background-soft px-4 py-3 text-sm text-heading/80">
                   {info.message}
                 </p>
+
+                <Link
+                  to={`/my-sessions/${session.id}`}
+                  className="font-medium text-primary"
+                >
+                  View details
+                </Link>
 
                 {/* ACTIONS */}
                 <div className="mt-4 flex flex-wrap gap-3 text-sm">

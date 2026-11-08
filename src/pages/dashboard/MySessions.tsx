@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchMySessions, updateSessionStatus } from "../../api/sessions";
 import type { Session } from "../../types";
+import { Link } from "react-router-dom";
 
 type Tab = "requests" | "upcoming" | "history";
 
@@ -180,11 +181,18 @@ function MySessions() {
                   </div>
                   <p className="text-sm text-muted">
                     {formatDate(session.date)} · {session.startTime} -{" "}
-                    {session.endTime}
+                    {session.endTime} ·{" "}
+                    {session.sessionType === "online" ? "Online" : "In person"}
                   </p>
                 </div>
 
                 <div className="flex shrink-0 gap-3 text-sm">
+                  <Link
+                    to={`/dashboard/sessions/${session.id}`}
+                    className="rounded-lg border px-3 py-1.5 font-medium text-heading hover:border-primary hover:text-primary"
+                  >
+                    View details
+                  </Link>
                   {session.status === "pending" && !hasEnded(session) && (
                     <>
                       <button

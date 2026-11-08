@@ -21,6 +21,7 @@ import MyBookings from "./pages/MyBookings";
 import RequireAuth from "./components/RequireAuth";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import SessionDetails from "./pages/sessions/SessionDetails";
 
 function App() {
   const location = useLocation();
@@ -73,12 +74,14 @@ function App() {
             <Route path="articles/:id/edit" element={<ArticleForm />} />
             <Route path="sessions" element={<MySessions />} />
             <Route path="availability" element={<MyAvailability />} />
+            <Route path="sessions/:id" element={<SessionDetails />} />
           </Route>
         </Route>
 
         {/* CLIENT ROUTES */}
         <Route element={<ClientRoute />}>
           <Route path="/my-sessions" element={<MyBookings />} />
+          <Route path="/my-sessions/:id" element={<SessionDetails />} />
         </Route>
       </Routes>
     </>

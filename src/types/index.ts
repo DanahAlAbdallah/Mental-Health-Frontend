@@ -60,7 +60,35 @@ export interface Session {
   startTime: string;
   endTime: string;
   status: "pending" | "confirmed" | "rejected" | "cancelled";
+  sessionType: "online" | "in-person";
   createdAt: string;
   therapistName?: string | null; // add
   patientName?: string | null; // add
+}
+
+// SESSION DETAILS
+export interface SessionDetail extends Session {
+  durationMinutes: number;
+  history: Pick<
+    Session,
+    "id" | "date" | "startTime" | "endTime" | "status" | "sessionType"
+  >[];
+  therapist: {
+    id: string;
+    name: string;
+    avatarUrl: string | null;
+    bio: string | null;
+    specialties: string[];
+    languages: string[];
+    yearsOfExperience: number | null;
+    sessionPrice: number | null;
+    location: string | null;
+  };
+  patient: {
+    id: string;
+    name: string;
+    avatarUrl: string | null;
+    email?: string | null;
+    phone?: string | null;
+  };
 }

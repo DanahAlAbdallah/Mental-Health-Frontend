@@ -1,5 +1,5 @@
-import type { Session } from "../types/index";
 import { apiRequest } from "./apiRequest";
+import type { Session, SessionDetail } from "../types/index";
 
 // CLIENT SESSION BOOKING
 export async function bookSession(slotId: string): Promise<Session> {
@@ -26,4 +26,9 @@ export async function updateSessionStatus(
     auth: true,
     body: JSON.stringify({ status }),
   });
+}
+
+// GET ONE SESSION WITH ALL ITS DETAILS
+export async function fetchSessionById(id: string): Promise<SessionDetail> {
+  return apiRequest<SessionDetail>(`/sessions/${id}`, { auth: true });
 }

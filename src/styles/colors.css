@@ -10,7 +10,8 @@
 
   /* Backgrounds — clean and airy */
   --color-background: #f8f9fc;
-  --color-background-soft: #eaf3fa;
+  /* --color-background-soft: #eaf3fa; */
+  --color-background-soft: #c7e3f9;
 
   /* Text — strong contrast and readability */
   --color-heading: #202a35;

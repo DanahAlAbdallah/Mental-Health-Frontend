@@ -36,6 +36,10 @@ export function updateMyProfile(
   return apiRequest<TherapistProfile>("/users/me/profile", {
     method: "PUT",
     auth: true,
-   body: JSON.stringify(data),
+    body: JSON.stringify(data),
   });
+}
+
+export async function fetchTherapistDetails(id: string): Promise<Therapist> {
+  return apiRequest(`/users/${id}`);
 }

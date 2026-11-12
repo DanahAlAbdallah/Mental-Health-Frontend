@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchTherapists } from "../api/users";
-import type { Therapist } from "../types";
+import { fetchTherapists } from "../../api/users";
+import type { Therapist } from "../../types";
 
 // THE PERSON ICON, USED IN THE EMPTY MESSAGE AND ON EVERY THERAPIST CARD,
 // SO WE WRITE IT ONLY ONCE

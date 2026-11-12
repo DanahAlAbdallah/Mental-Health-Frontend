@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeft,
@@ -8,122 +7,24 @@ import {
   Clock,
   Link2,
 } from "lucide-react";
-import { fetchArticleById, fetchLatestArticles } from "../../api/articles";
-import type { Article } from "../../types";
+import { useArticleDetail } from "../../hooks/articles/useArticlesDetail";
+import { Avatar } from "../../components/Avatar";
+import type {
+  ReactElement,
+  JSXElementConstructor,
+  ReactNode,
+  ReactPortal,
+  Key,
+} from "react";
+import { readingTime } from "../../utils/readingTime";
+import { formatDate } from "../../utils/formatDate";
+import { toParagraphs } from "../../utils/toParagraphs";
 
-// ---------- HELPERS ----------
-
-// TURN THE DATE FROM THE DATABASE INTO SIMPLE TEXT, LIKE "Oct 16, 2026"
-function formatDate(date: string): string {
-  if (!date) return "";
-  return new Date(date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
-
-// ABOUT 200 WORDS PER MINUTE
-function readingTime(content: string): number {
-  const words = content.split(/\s+/).filter(Boolean).length;
-  return Math.max(1, Math.round(words / 200));
-}
-
-// SPLIT THE TEXT INTO PARAGRAPHS AT EVERY BLANK LINE
-function toParagraphs(content: string): string[] {
-  return content
-    .split(/\n\s*\n/)
-    .map((p) => p.trim())
-    .filter(Boolean);
-}
-
-function Avatar({ name, size = "h-10 w-10" }: { name: string; size?: string }) {
-  return (
-    <span
-      className={`flex ${size} shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-button-text`}
-    >
-      {name.charAt(0).toUpperCase()}
-    </span>
-  );
-}
-
-// ---------- PAGE ----------
-
-function ArticleDetailPage() {
+export default function ArticleDetailPage() {
   const { id } = useParams();
+  const { article, related, loading, progress, copied, copyLink } =
+    useArticleDetail(id);
 
-  const [article, setArticle] = useState<Article | undefined>(undefined);
-  const [related, setRelated] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [progress, setProgress] = useState(0);
-  const [copied, setCopied] = useState(false);
-
-  // LOAD THE ARTICLE WHEN THE PAGE OPENS OR THE ID CHANGES
-  useEffect(() => {
-    if (!id) return;
-    let active = true;
-
-    setLoading(true);
-    window.scrollTo({ top: 0 });
-
-    fetchArticleById(id)
-      .then((data) => {
-        if (active) setArticle(data);
-      })
-      .catch(() => {
-        if (active) setArticle(undefined);
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
-
-    return () => {
-      active = false;
-    };
-  }, [id]);
-
-  // LOAD OTHER ARTICLES FOR THE "KEEP READING" SECTION
-  useEffect(() => {
-    let active = true;
-
-    fetchLatestArticles()
-      .then((data) => {
-        if (active) setRelated(data.filter((a) => a.id !== id).slice(0, 3));
-      })
-      .catch(() => {
-        // THIS SECTION IS OPTIONAL, SO A FAILURE IS IGNORED
-      });
-
-    return () => {
-      active = false;
-    };
-  }, [id]);
-
-  // READING PROGRESS BAR AT THE TOP OF THE SCREEN
-  useEffect(() => {
-    function onScroll() {
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(
-        total > 0 ? Math.min(100, (window.scrollY / total) * 100) : 0,
-      );
-    }
-
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [article]);
-
-  async function copyLink() {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // CLIPBOARD CAN BE BLOCKED (FOR EXAMPLE ON HTTP), SO IT FAILS QUIETLY
-    }
-  }
-
-  // ---------- LOADING ----------
   if (loading) {
     return (
       <div className="min-h-screen bg-background px-4 py-10 sm:px-6">
@@ -142,7 +43,6 @@ function ArticleDetailPage() {
     );
   }
 
-  // ---------- NOT FOUND ----------
   if (!article) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3 px-4 text-center">
@@ -186,7 +86,6 @@ function ArticleDetailPage() {
             Back to articles
           </Link>
 
-          {/* HEADER */}
           <header className="mt-8">
             <span className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
               {article.category}
@@ -244,18 +143,46 @@ function ArticleDetailPage() {
       <article className="px-4 sm:px-6 lg:px-10">
         <div className="mx-auto max-w-3xl border-t border-border py-10">
           <div className="space-y-6 text-base leading-8 text-heading/90 sm:text-lg sm:leading-9">
-            {paragraphs.map((paragraph, index) => (
-              <p
-                key={index}
-                className={`whitespace-pre-line ${
-                  index === 0
-                    ? "text-lg font-medium text-heading sm:text-xl"
-                    : ""
-                }`}
-              >
-                {paragraph}
-              </p>
-            ))}
+            {paragraphs.map(
+              (
+                paragraph:
+                  | string
+                  | number
+                  | bigint
+                  | boolean
+                  | ReactElement<unknown, string | JSXElementConstructor<any>>
+                  | Iterable<ReactNode>
+                  | ReactPortal
+                  | Promise<
+                      | string
+                      | number
+                      | bigint
+                      | boolean
+                      | ReactPortal
+                      | ReactElement<
+                          unknown,
+                          string | JSXElementConstructor<any>
+                        >
+                      | Iterable<ReactNode>
+                      | null
+                      | undefined
+                    >
+                  | null
+                  | undefined,
+                index: Key | null | undefined,
+              ) => (
+                <p
+                  key={index}
+                  className={`whitespace-pre-line ${
+                    index === 0
+                      ? "text-lg font-medium text-heading sm:text-xl"
+                      : ""
+                  }`}
+                >
+                  {paragraph}
+                </p>
+              ),
+            )}
           </div>
 
           {/* AUTHOR CARD */}
@@ -278,7 +205,7 @@ function ArticleDetailPage() {
           </div>
 
           {/* CALL TO ACTION */}
-          <section className="text-white relative mt-8 overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-primary-hover p-7 text-button-text shadow-md sm:p-9">
+          <section className="relative mt-8 overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-primary-hover p-7 text-button-text shadow-md sm:p-9">
             <div className="pointer-events-none absolute -right-8 -top-8 h-36 w-36 rounded-full bg-white/10" />
             <div className="relative">
               <h2 className="text-xl font-bold sm:text-2xl">
@@ -341,5 +268,3 @@ function ArticleDetailPage() {
     </div>
   );
 }
-
-export default ArticleDetailPage;

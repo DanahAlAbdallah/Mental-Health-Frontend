@@ -1,38 +1,24 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import yellowLineVideo from "../assets/yellow_line_loop.webm";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-// STYLE SHARED BY BOTH INPUT FIELDS, SO WE WRITE IT ONLY ONCE
+import yellowLineVideo from "../../assets/yellow_line_loop.webm";
+import { useLogin } from "../../hooks/auth/useLogin";
+
 const inputClass =
   "w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-heading placeholder:text-muted outline-none transition focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10";
 
 function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const { login } = useAuth();
   const navigate = useNavigate();
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    error,
+    loading,
+    handleLogin,
+  } = useLogin();
 
-  // RUNS WHEN THE USER CLICKS "LOG IN": SENDS THE EMAIL AND PASSWORD,
-  // THEN GOES TO THE HOME PAGE, OR SHOWS THE ERROR IF IT FAILS
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    try {
-      await login(email, password);
-      navigate("/");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
-      setLoading(false);
-    }
-  }
-
-  // LOGIN PAGE DESIGN
   return (
     <main className="relative h-screen overflow-hidden bg-[#EAF2F9] flex items-center justify-center px-4">
       <video
@@ -74,7 +60,7 @@ function LoginPage() {
           )}
 
           {/* FORM */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-4">
             {/* EMAIL */}
             <div>
               <label
@@ -103,17 +89,12 @@ function LoginPage() {
                 >
                   Password
                 </label>
-                <button
-                  type="button"
-                  className="text-xs text-muted cursor-pointer hover:text-primary-hover transition"
+                <Link
+                  to="/forgot-password"
+                  className="text-xs text-indigo-400 hover:underline"
                 >
-                  <Link
-                    to="/forgot-password"
-                    className="text-xs text-indigo-400 hover:underline"
-                  >
-                    Forgot Password?
-                  </Link>
-                </button>
+                  Forgot Password?
+                </Link>
               </div>
               <input
                 id="password"

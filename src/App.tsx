@@ -1,10 +1,10 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import LandingPage from "./pages/Landing/LandingPage";
-import TherapistsPage from "./pages/TherapistsPage";
-import TherapistDetailPage from "./pages/TherapistDetailPage";
+import LoginPage from "./pages/auth/LoginPage";
+import SignupPage from "./pages/auth/SignupPage";
+import LandingPage from "./pages/landing/LandingPage";
+import TherapistsPage from "./pages/therapist/TherapistsPage";
+import TherapistDetailPage from "./pages/therapist/TherapistDetailPage";
 import ProfileReminder from "./components/ProfileReminder";
 import Profile from "./pages/Profile";
 import TherapistRoute from "./components/TherapitRoute";
@@ -14,13 +14,13 @@ import MyArticles from "./pages/dashboard/MyArticles";
 import MyAvailability from "./pages/dashboard/MyAvailability";
 import MySessions from "./pages/dashboard/MySessions";
 import ArticleForm from "./pages/dashboard/ArticleForm";
-import ArticleDetailPage from "./pages/Articles/ArticleDetailPage";
-import ArticlesPage from "./pages/Articles/ArticlesPage";
+import ArticleDetailPage from "./pages/articles/ArticleDetailPage";
+import ArticlesPage from "./pages/articles/ArticlesPage";
 import ClientRoute from "./components/ClientRoute";
 import MyBookings from "./pages/MyBookings";
 import RequireAuth from "./components/RequireAuth";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 import SessionDetails from "./pages/sessions/SessionDetails";
 
 function App() {

@@ -1,29 +1,11 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import { requestPasswordReset } from "../api/auth";
+import { useForgotPassword } from "../../hooks/auth/useForgotPassword";
 
 export default function ForgotPassword() {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const { email, setEmail, submitted, loading, error, handleSubmit } =
+    useForgotPassword();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      await requestPasswordReset(email);
-      setSubmitted(true);
-    } catch (err: any) {
-      setError(err.message || "Failed to send request.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-return (
+  return (
     <div className="flex min-h-screen items-center justify-center bg-[#f0f7fc] px-4 text-[#33363a]">
       {/* Subtle warm sunshine accent glow */}
       <div className="absolute -top-32 left-1/2 -translate-x-1/2 h-64 w-96 rounded-full bg-[#f7e6a1]/35 blur-3xl pointer-events-none" />
@@ -58,7 +40,8 @@ return (
           <div className="space-y-4">
             <div className="rounded-xl bg-emerald-50 p-4 border border-emerald-200 text-emerald-800 text-sm leading-relaxed">
               <span className="font-semibold block mb-1">Check your inbox</span>
-              If that email exists in our system, we have sent a password reset link.
+              If that email exists in our system, we have sent a password reset
+              link.
             </div>
             <Link
               to="/login"
@@ -95,10 +78,25 @@ return (
               className="w-full rounded-xl bg-[#5ea6e1] py-2.5 text-sm cursor-pointer font-semibold text-white shadow-md shadow-[#5ea6e1]/20 hover:bg-[#86b8e0] active:scale-[0.99] transition disabled:opacity-50 disabled:pointer-events-none"
             >
               {loading ? (
-                <span className="flex items-center justify-center gap-2 ">
-                  <svg className="animate-spin h-4 w-4 text-[#202124]" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                <span className="flex items-center justify-center gap-2">
+                  <svg
+                    className="animate-spin h-4 w-4 text-[#202124]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
                   </svg>
                   Sending instructions...
                 </span>

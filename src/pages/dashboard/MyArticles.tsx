@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Clock,
@@ -8,173 +7,29 @@ import {
   PenLine,
   Plus,
   Search,
-  Tags,
   Trash2,
-  type LucideIcon,
 } from "lucide-react";
-import { fetchMyArticles, deleteArticle } from "../../api/articles";
-import type { Article } from "../../types";
 
-// ---------- HELPERS ----------
-
-// REMOVE HTML TAGS AND EXTRA SPACES TO BUILD A SHORT PREVIEW
-function excerpt(content: string, length = 140): string {
-  const text = content
-    .replace(/<[^>]*>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-  return text.length > length ? `${text.slice(0, length).trim()}...` : text;
-}
-
-// ABOUT 200 WORDS PER MINUTE
-function readingTime(content: string): number {
-  const words = content
-    .replace(/<[^>]*>/g, " ")
-    .split(/\s+/)
-    .filter(Boolean).length;
-  return Math.max(1, Math.round(words / 200));
-}
-
-function formatDate(date: string): string {
-  return new Date(date).toLocaleDateString(undefined, {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
-
-// ---------- SMALL COMPONENTS ----------
-
-function Stat({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: LucideIcon;
-  label: string;
-  value: string | number;
-}) {
-  return (
-    <div className="flex items-center gap-3 rounded-2xl border border-border bg-surface p-4 shadow-sm">
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-        <Icon className="h-5 w-5" />
-      </span>
-      <div className="min-w-0">
-        <p className="truncate text-xl font-bold leading-none text-heading">
-          {value}
-        </p>
-        <p className="mt-1 text-xs text-muted">{label}</p>
-      </div>
-    </div>
-  );
-}
-
-function IconAction({
-  to,
-  onClick,
-  label,
-  danger = false,
-  disabled = false,
-  children,
-}: {
-  to?: string;
-  onClick?: () => void;
-  label: string;
-  danger?: boolean;
-  disabled?: boolean;
-  children: React.ReactNode;
-}) {
-  const className = `flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-muted transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
-    danger
-      ? "hover:bg-red-50 hover:text-red-600"
-      : "hover:bg-primary/10 hover:text-primary"
-  }`;
-
-  if (to) {
-    return (
-      <Link to={to} aria-label={label} title={label} className={className}>
-        {children}
-      </Link>
-    );
-  }
-
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      aria-label={label}
-      title={label}
-      className={className}
-    >
-      {children}
-    </button>
-  );
-}
-
-function ArticlesSkeleton() {
-  return (
-    <div className="animate-pulse space-y-6">
-      <div className="h-10 w-48 rounded-xl bg-black/5" />
-      <div className="grid grid-cols-3 gap-3">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="h-20 rounded-2xl bg-black/5" />
-        ))}
-      </div>
-      <div className="space-y-3">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="h-28 rounded-2xl bg-black/5" />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ---------- PAGE ----------
+import { useMyArticles } from "../../hooks/dashboard/useMyArticles";
+import { excerpt, readingTime, formatDate } from "../../utils/articleHelpers";
+import {
+  Stat,
+  IconAction,
+  ArticlesSkeleton,
+} from "../../components/articlesDashboard/ArticleComponents";
 
 function MyArticles() {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-
-  useEffect(() => {
-    let active = true;
-
-    fetchMyArticles()
-      .then((data) => {
-        if (active) setArticles(data);
-      })
-      .catch(() => {
-        if (active) setError("We couldn't load your articles.");
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  async function handleDelete(article: Article) {
-    if (!window.confirm(`Delete "${article.title}"? This can't be undone.`)) {
-      return;
-    }
-
-    setError("");
-    setDeletingId(article.id);
-    try {
-      await deleteArticle(article.id);
-      setArticles((prev) => prev.filter((a) => a.id !== article.id));
-    } catch {
-      setError("We couldn't delete the article. Please try again.");
-    } finally {
-      setDeletingId(null);
-    }
-  }
+  const {
+    articles,
+    loading,
+    error,
+    search,
+    setSearch,
+    category,
+    setCategory,
+    deletingId,
+    handleDelete,
+  } = useMyArticles();
 
   if (loading) return <ArticlesSkeleton />;
 
@@ -220,7 +75,11 @@ function MyArticles() {
       {/* STATS */}
       <div className="grid grid-cols-3 gap-3">
         <Stat icon={FileText} label="Articles" value={articles.length} />
-        <Stat icon={Tags} label="Categories" value={categories.length - 1} />
+        <Stat
+          icon={FileText}
+          label="Categories"
+          value={categories.length - 1}
+        />
         <Stat icon={PenLine} label="Latest article" value={latest} />
       </div>
 

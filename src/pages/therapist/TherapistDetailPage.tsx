@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
-import { fetchTherapistSlots } from "../api/availability";
-import { bookSession } from "../api/sessions";
-import { useAuth } from "../context/AuthContext";
-import { formatDate } from "../utils/formatDate";
-import type { Therapist, AvailabilitySlot } from "../types";
-import { fetchTherapistDetails } from "../api/users";
+import { fetchTherapistSlots } from "../../api/availability";
+import { bookSession } from "../../api/sessions";
+import { useAuth } from "../../context/AuthContext";
+import { formatDate } from "../../utils/formatDate";
+import type { Therapist, AvailabilitySlot } from "../../types";
+import { fetchTherapistDetails } from "../../api/users";
 
 // THE THERAPIST PROFILE & BOOKING DETAIL PAGE
 function TherapistDetailPage() {

@@ -72,7 +72,7 @@ function Navbar() {
   );
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-border bg-background/85 px-5 py-3 backdrop-blur-md sm:px-8 lg:px-10">
+    <nav className="sticky top-0 z-50 border-b border-border bg-white px-5 py-3 backdrop-blur-md sm:px-8 lg:px-10">
       <div className="mx-auto flex max-w-7xl items-center justify-between">
         {/* LOGO */}
         <Link

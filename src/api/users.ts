@@ -1,9 +1,26 @@
 import type { Therapist, TherapistProfile, User } from "../types";
 import { apiRequest } from "./apiRequest";
-
+export interface TherapistsResponse {
+  therapists: Therapist[];
+  currentPage: number;
+  totalTherapists: number;
+  totalPages: number;
+}
 // GET ONLY THERAPISTS
-export async function fetchTherapists(): Promise<Therapist[]> {
-  return apiRequest<Therapist[]>("/users/therapists");
+export async function fetchTherapists(
+  search = "",
+  page = 1,
+  limit = 9
+): Promise<TherapistsResponse> {
+  const params = new URLSearchParams({
+    search,
+    page: String(page),
+    limit: String(limit),
+  });
+
+  return apiRequest<TherapistsResponse>(
+    `/users/therapists?${params.toString()}`
+  );
 }
 
 // GET THE LOGGED-IN THERAPIST'S PROFESSIONAL PROFILE

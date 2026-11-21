@@ -1,10 +1,11 @@
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { fetchTherapists } from "../../api/users";
 import type { Therapist } from "../../types";
+import {Pagination} from "../../components/Pagination";
 
-// THE PERSON ICON, USED IN THE EMPTY MESSAGE AND ON EVERY THERAPIST CARD,
-// SO WE WRITE IT ONLY ONCE
+// THE PERSON ICON, USED IN THE EMPTY MESSAGE AND ON EVERY THERAPIST CARD
 function PersonIcon() {
   return (
     <svg
@@ -26,33 +27,46 @@ function TherapistsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // RUNS WHEN THE PAGE OPENS: LOADS THE THERAPISTS FROM THE BACKEND,
-  // OR SHOWS AN ERROR IF IT FAILS
-  useEffect(() => {
-    fetchTherapists()
-      .then(setTherapists)
-      .catch((err) =>
-        setError(
-          err instanceof Error ? err.message : "Could not load therapists",
-        ),
-      )
-      .finally(() => setLoading(false));
-  }, []);
+  // SEARCH AND PAGINATION STATE
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalTherapists, setTotalTherapists] = useState(0);
 
-  if (loading) {
-    return  <div
-            className="flex flex-col items-center justify-center py-20 text-center"
-            role="status"
-          >
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-border border-t-primary" />
-            <p className="mt-4 text-sm text-muted">Loading therapists...</p>
-          </div>;
-  }
+  // RESET TO PAGE 1 WHEN THE SEARCH CHANGES
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
+  // FETCH THERAPISTS FROM THE BACKEND
+  // WAIT 400MS AFTER TYPING BEFORE SENDING A SEARCH REQUEST
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setLoading(true);
+      setError("");
+
+      fetchTherapists(search.trim(), currentPage, 9)
+        .then((data) => {
+          setTherapists(data.therapists);
+          setTotalPages(data.totalPages);
+          setTotalTherapists(data.totalTherapists);
+        })
+        .catch((err) => {
+          setError(
+            err instanceof Error ? err.message : "Could not load therapists"
+          );
+        })
+        .finally(() => setLoading(false));
+    }, 400);
+
+    return () => clearTimeout(timeoutId);
+  }, [search, currentPage]);
 
   // THERAPISTS PAGE DESIGN
   return (
     <div className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl space-y-8">
+
         {/* HEADER */}
         <header className="space-y-3">
           <p className="text-sm font-medium text-primary">
@@ -69,75 +83,115 @@ function TherapistsPage() {
           </p>
         </header>
 
+        {/* SEARCH INPUT */}
+        <div>
+          <label
+            htmlFor="therapist-search"
+            className="mb-2 block text-sm font-medium text-heading"
+          >
+            Search therapists
+          </label>
+
+          <input
+            id="therapist-search"
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by name, specialty, language, or location..."
+            className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-heading outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+          />
+        </div>
+
         {/* THERAPIST COUNT */}
         <div className="flex items-center justify-between border-b border-border pb-4">
           <p className="text-sm text-muted">Meet our professionals</p>
 
           <span className="rounded-full bg-surface-soft px-3 py-1.5 text-sm font-medium text-muted">
-            {therapists.length}{" "}
-            {therapists.length === 1 ? "therapist" : "therapists"}
+            {totalTherapists}{" "}
+            {totalTherapists === 1 ? "therapist" : "therapists"}
           </span>
         </div>
 
-        {/* THERAPIST CARD */}
-        {error ? (
+        {/* LOADING */}
+        {loading ? (
+          <div
+            className="flex flex-col items-center justify-center py-20 text-center"
+            role="status"
+          >
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-border border-t-primary" />
+            <p className="mt-4 text-sm text-muted">
+              Loading therapists...
+            </p>
+          </div>
+        ) : error ? (
           <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-6 text-center text-sm text-red-600">
             {error}
           </div>
         ) : therapists.length === 0 ? (
+          /* EMPTY MESSAGE */
           <div className="rounded-2xl border border-border bg-surface px-5 py-16 text-center">
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-surface-soft text-primary">
               <PersonIcon />
             </div>
 
             <h2 className="font-semibold text-heading">
-              No therapists available yet
+              No therapists found
             </h2>
 
             <p className="mt-2 text-sm text-muted">
-              Please check back soon to discover our professionals.
+              Try another search term or check back later.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {therapists.map((therapist) => (
-              <Link
-                key={therapist.id}
-                to={`/therapists/${therapist.id}`}
-                className="group flex items-center gap-4 rounded-2xl border border-border bg-surface p-5 transition duration-200 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 focus:outline-none focus:ring-2 focus:ring-primary/30"
-              >
-                {/* AVATAR PLACEHOLDER */}
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-surface-soft text-primary transition group-hover:bg-primary group-hover:text-white">
-                  <PersonIcon />
-                </div>
+          <>
+            {/* THERAPIST CARDS */}
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {therapists.map((therapist) => (
+                <Link
+                  key={therapist.id}
+                  to={`/therapists/${therapist.id}`}
+                  className="group flex items-center gap-4 rounded-2xl border border-border bg-surface p-5 transition duration-200 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                >
+                  {/* AVATAR PLACEHOLDER */}
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-surface-soft text-primary transition group-hover:bg-primary group-hover:text-white">
+                    <PersonIcon />
+                  </div>
 
-                {/* THERAPIST DETAILS */}
-                <div className="min-w-0 flex-1">
-                  <h2 className="truncate font-semibold text-heading transition group-hover:text-primary">
-                    {therapist.name}
-                  </h2>
+                  {/* THERAPIST DETAILS */}
+                  <div className="min-w-0 flex-1">
+                    <h2 className="truncate font-semibold text-heading transition group-hover:text-primary">
+                      {therapist.name}
+                    </h2>
 
-                  <p className="mt-1 text-sm text-muted">
-                    Mental health professional
-                  </p>
+                    <p className="mt-1 text-sm text-muted">
+                      Mental health professional
+                    </p>
 
-                  <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
-                    View profile
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.7"
-                      className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                      aria-hidden="true"
-                    >
-                      <path d="M5 12h14M13 6l6 6-6 6" />
-                    </svg>
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
+                    <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                      View profile
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.7"
+                        className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14M13 6l6 6-6 6" />
+                      </svg>
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* PAGINATION */}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </>
         )}
       </div>
     </div>

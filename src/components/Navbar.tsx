@@ -91,25 +91,41 @@ function Navbar() {
 
         {/* DESKTOP NAVIGATION */}
         <div className="hidden items-center gap-2 md:flex">
-          <NavLink to="/articles" className={navLinkClass}>
-            Articles
-          </NavLink>
-          <NavLink to="/therapists" className={navLinkClass}>
-            Therapists
-          </NavLink>
+        {!user || user.role === "client" ? (
+  <>
+    <NavLink to="/articles" className={navLinkClass}>
+      Articles
+    </NavLink>
+
+    <NavLink to="/therapists" className={navLinkClass}>
+      Therapists
+    </NavLink>
+  </>
+) : null}
 
           {user ? (
             <>
-              {user.role === "client" && (
-                <NavLink to="/my-sessions" className={navLinkClass}>
-                  My sessions
-                </NavLink>
-              )}
-              {user.role === "therapist" && (
-                <NavLink to="/dashboard" className={navLinkClass}>
-                  Dashboard
-                </NavLink>
-              )}
+            {user.role === "client" && (
+  <NavLink to="/my-sessions" className={navLinkClass}>
+    My sessions
+  </NavLink>
+)}
+
+{user.role === "therapist" && (
+  <>
+    <NavLink to="dashboard/sessions" className={navLinkClass}>
+      My sessions
+    </NavLink>
+
+    <NavLink to="dashboard/availability" className={navLinkClass}>
+      My availability
+    </NavLink>
+
+    <NavLink to="/dashboard" className={navLinkClass}>
+      Dashboard
+    </NavLink>
+  </>
+)}
 
               {/* ACCOUNT MENU */}
               <div ref={accountRef} className="relative ml-3">

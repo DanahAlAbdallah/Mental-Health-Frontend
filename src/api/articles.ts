@@ -1,10 +1,29 @@
 import type { Article } from "../types";
 import { apiRequest, ApiError } from "./apiRequest";
 
-// GET ALL ARTICLES WITH SEARCH
-export async function fetchArticles(search?: string): Promise<Article[]> {
-  const query = search ? `?search=${encodeURIComponent(search)}` : "";
-  return apiRequest<Article[]>(`/articles${query}`);
+export interface ArticlesResponse {
+  articles: Article[];
+  currentPage: number;
+  totalArticles: number;
+  totalPages: number;
+}
+
+// GET ALL ARTICLES WITH PAGING
+export async function fetchArticles(
+  search?: string,
+  page = 1,
+  limit = 10,
+): Promise<ArticlesResponse> {
+  const params = new URLSearchParams();
+
+  params.set("page", String(page));
+  params.set("limit", String(limit));
+
+  if (search?.trim()) {
+    params.set("search", search.trim());
+  }
+
+  return apiRequest<ArticlesResponse>(`/articles?${params.toString()}`);
 }
 
 // GET SPECIFIC THERAPIST'S ARTICLES
@@ -46,7 +65,10 @@ export async function createArticle(data: ArticleInput): Promise<Article> {
 }
 
 // UPDATE EXISTING ARTICLE
-export async function updateArticle(id: string, data: ArticleInput): Promise<Article> {
+export async function updateArticle(
+  id: string,
+  data: ArticleInput,
+): Promise<Article> {
   return apiRequest<Article>(`/articles/${id}`, {
     method: "PUT",
     auth: true,

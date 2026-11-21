@@ -4,14 +4,25 @@ import ArticleCard from "../../components/ArticleCard";
 import Toast from "../../components/Toast";
 import { useAuth } from "../../context/AuthContext";
 import { useArticlesPage } from "../../hooks/articles/useArticlesPage";
+import { Pagination } from "../../components/Pagination";
 
 
 function ArticlesPage() {
+    const {
+    articles,
+    loading,
+    error,
+    searchTerm,
+    setSearchTerm,
+    currentPage,
+    totalPages,
+    setCurrentPage,
+  } = useArticlesPage();
 
-  const { articles, loading, error, searchTerm, setSearchTerm } = useArticlesPage();
   const [toast, setToast] = useState<string | null>(null);
   const location = useLocation();
   const { user } = useAuth();
+
 
   useEffect(() => {
     const state = location.state as { message?: string } | null;
@@ -29,12 +40,15 @@ function ArticlesPage() {
         {/* HEADER */}
         <header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div className="space-y-3">
-            <p className="text-sm font-medium text-primary">Knowledge & well-being</p>
+            <p className="text-sm font-medium text-primary">
+              Knowledge & well-being
+            </p>
             <h1 className="text-3xl font-semibold tracking-tight text-heading sm:text-4xl">
               Articles
             </h1>
             <p className="max-w-xl text-sm leading-6 text-muted sm:text-base">
-              Explore thoughtful reads and practical insights to support your mental well-being.
+              Explore thoughtful reads and practical insights to support your
+              mental well-being.
             </p>
           </div>
 
@@ -66,7 +80,10 @@ function ArticlesPage() {
 
         {/* ARTICLE LIST */}
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center" role="status">
+          <div
+            className="flex flex-col items-center justify-center py-20 text-center"
+            role="status"
+          >
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-border border-t-primary" />
             <p className="mt-4 text-sm text-muted">Loading articles...</p>
           </div>
@@ -78,7 +95,9 @@ function ArticlesPage() {
           <div className="rounded-2xl border border-border bg-surface px-5 py-16 text-center">
             <h2 className="font-semibold text-heading">No articles found</h2>
             <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-muted">
-              {searchTerm ? "Try a different search term." : "No articles to display."}
+              {searchTerm
+                ? "Try a different search term."
+                : "No articles to display."}
             </p>
             {searchTerm && (
               <button
@@ -100,6 +119,11 @@ function ArticlesPage() {
 
         {toast && <Toast message={toast} onClose={() => setToast(null)} />}
       </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }

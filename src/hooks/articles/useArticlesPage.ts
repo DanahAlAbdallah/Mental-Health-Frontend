@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import type { Article } from "../../types";
 import { fetchArticles } from "../../api/articles";
 
-
 const SEARCH_DELAY = 400;
 
 export function useArticlesPage() {
@@ -10,6 +9,14 @@ export function useArticlesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  // Reset pagination when searching
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    setCurrentPage(1);
+  };
 
   useEffect(() => {
     let ignore = false;
@@ -18,9 +25,13 @@ export function useArticlesPage() {
       setLoading(true);
       setError("");
 
-      fetchArticles(searchTerm)
+      fetchArticles(searchTerm, currentPage)
         .then((data) => {
-          if (!ignore) setArticles(data);
+          console.log("API response:", data);
+          if (!ignore) {
+            setArticles(data.articles);
+            setTotalPages(data.totalPages);
+          }
         })
         .catch((err) => {
           if (!ignore) {
@@ -38,13 +49,16 @@ export function useArticlesPage() {
       ignore = true;
       clearTimeout(timer);
     };
-  }, [searchTerm]);
+  }, [searchTerm, currentPage]);
 
   return {
     articles,
     loading,
     error,
     searchTerm,
-    setSearchTerm,
+    setSearchTerm: handleSearchChange,
+    currentPage,
+    totalPages,
+    setCurrentPage,
   };
 }

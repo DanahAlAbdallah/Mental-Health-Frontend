@@ -1,16 +1,18 @@
 import type { Therapist, TherapistProfile, User } from "../types";
 import { apiRequest } from "./apiRequest";
+
 export interface TherapistsResponse {
   therapists: Therapist[];
   currentPage: number;
   totalTherapists: number;
   totalPages: number;
 }
+
 // GET ONLY THERAPISTS
 export async function fetchTherapists(
   search = "",
   page = 1,
-  limit = 9
+  limit = 9,
 ): Promise<TherapistsResponse> {
   const params = new URLSearchParams({
     search,
@@ -19,7 +21,7 @@ export async function fetchTherapists(
   });
 
   return apiRequest<TherapistsResponse>(
-    `/users/therapists?${params.toString()}`
+    `/users/therapists?${params.toString()}`,
   );
 }
 
@@ -57,6 +59,20 @@ export function updateMyProfile(
   });
 }
 
+// GET ONE THERAPIST'S PUBLIC DETAILS
 export async function fetchTherapistDetails(id: string): Promise<Therapist> {
-  return apiRequest(`/users/${id}`);
+  return apiRequest<Therapist>(`/users/${id}`);
+}
+
+// UPLOAD THE LOGGED-IN USER'S PROFILE PHOTO
+export function uploadMyAvatar(photo: File): Promise<User> {
+  const formData = new FormData();
+
+  formData.append("photo", photo);
+
+  return apiRequest<User>("/users/me/avatar", {
+    method: "POST",
+    auth: true,
+    body: formData,
+  });
 }

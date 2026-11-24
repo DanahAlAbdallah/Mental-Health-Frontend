@@ -26,7 +26,9 @@ export async function apiRequest<T>(
     res = await fetch(`${API_URL}/api${path}`, {
       ...options,
       headers: {
-        ...(options.body ? { "Content-Type": "application/json" } : {}),
+        ...(options.body && !(options.body instanceof FormData)
+          ? { "Content-Type": "application/json" }
+          : {}),
         ...(auth && token ? { Authorization: `Bearer ${token}` } : {}),
         ...headers,
       },

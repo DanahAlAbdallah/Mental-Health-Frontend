@@ -157,7 +157,7 @@ function Profile() {
   // SELECT AND VALIDATE PROFILE PHOTO
   function handlePhotoChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
-    console.log("SELECTED FILE:", file);
+  
 
     if (!file) return;
 
@@ -176,14 +176,12 @@ function Profile() {
     }
 
     setSelectedPhoto(file);
-    console.log("PHOTO SELECTED:", file.name);
     setError("");
     setSuccess("");
   }
 
   // UPLOAD PROFILE PHOTO
   async function handleUploadPhoto() {
-    console.log("UPLOAD HANDLER STARTED");
     if (!selectedPhoto) return;
 
     setUploadingPhoto(true);
@@ -192,7 +190,6 @@ function Profile() {
 
     try {
       const updatedUser = await uploadMyAvatar(selectedPhoto);
-      console.log("UPDATED USER:", updatedUser);
       updateUser(updatedUser);
 
       setForm((current) => ({
@@ -297,53 +294,48 @@ function Profile() {
     "mt-2 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-heading outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20";
 
   const displayedPhoto = photoPreview || form.avatarUrl;
-  console.log("SELECTED PHOTO STATE:", selectedPhoto);
-  return (
-    <main className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:py-14">
-      <div className="mx-auto max-w-3xl">
-        {/* PAGE HEADER */}
-        <header className="mb-8">
-          <p className="mb-2 text-sm font-medium text-primary">
-            YOUR ATHAR ACCOUNT
-          </p>
 
-          <h1 className="text-3xl font-bold text-heading sm:text-4xl">
-            My Profile
-          </h1>
+return (
+  <main className="min-h-screen bg-white px-4 py-10 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-4xl space-y-7">
 
-          <p className="mt-3 text-sm leading-6 text-muted">
-            Manage your personal information
-            {isTherapist
-              ? " and help clients get to know you."
-              : " and keep your account up to date."}
-          </p>
-        </header>
+      {/* PAGE HEADER */}
+      <header>
+        <h1 className="text-2xl font-semibold text-heading">
+          My Profile
+        </h1>
+        <p className="mt-1 text-sm text-muted">
+          Manage your personal information and account details.
+        </p>
+      </header>
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-8 rounded-2xl border border-border bg-background-soft p-5 shadow-sm sm:p-8"
-        >
-          {/* PROFILE HEADER */}
-          <section className="flex flex-wrap items-center gap-5">
-            {/* PROFILE PHOTO */}
+      <form onSubmit={handleSubmit} className="space-y-6">
+
+        {/* PROFILE CARD */}
+        <section className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+          <h2 className="mb-5 text-base font-semibold text-heading">
+            Profile
+          </h2>
+
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
             <div className="flex flex-col items-center gap-3">
               {displayedPhoto ? (
                 <img
                   src={displayedPhoto}
                   alt="Profile"
-                  className="h-24 w-24 rounded-full border border-border object-cover"
+                  className="h-20 w-20 rounded-full object-cover"
                 />
               ) : (
-                <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-primary/10 text-3xl font-semibold text-primary">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 text-2xl font-semibold text-primary">
                   {form.name.trim().charAt(0).toUpperCase() || "U"}
                 </div>
               )}
 
               <label
                 htmlFor="profilePhoto"
-                className="cursor-pointer text-sm font-medium text-primary transition hover:text-primary-hover"
+                className="cursor-pointer text-sm font-medium text-primary hover:text-primary-hover"
               >
-                Choose photo
+                Change photo
               </label>
 
               <input
@@ -357,90 +349,75 @@ function Profile() {
               {selectedPhoto && (
                 <button
                   type="button"
-                 onClick={() => {
-  console.log("UPLOAD BUTTON CLICKED");
-  handleUploadPhoto();
-}}
+                  onClick={handleUploadPhoto}
                   disabled={uploadingPhoto}
-                  className="rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-white transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
+                  className="rounded-lg bg-primary px-4 py-2 text-xs font-medium text-white transition hover:bg-primary-hover disabled:opacity-60"
                 >
                   {uploadingPhoto ? "Uploading..." : "Upload photo"}
                 </button>
               )}
             </div>
 
-            {/* USER INFORMATION */}
-            <div className="min-w-0">
-              <h2 className="text-lg font-semibold text-heading">
+            <div className="text-center sm:text-left">
+              <h3 className="text-lg font-semibold text-heading">
                 {form.name || "Your name"}
-              </h2>
-
-              <p className="text-sm capitalize text-muted">{user.role}</p>
-
-              <p className="mt-1 break-all text-sm text-muted">{form.email}</p>
-
+              </h3>
+              <p className="mt-1 text-sm capitalize text-muted">
+                {user.role}
+              </p>
+              <p className="mt-1 break-all text-sm text-muted">
+                {form.email}
+              </p>
               <p className="mt-2 text-xs text-muted">
-                JPG, PNG, or WEBP. Maximum size: 5 MB.
+                JPG, PNG or WEBP. Maximum 5 MB.
               </p>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <div className="h-px bg-border" />
+        {/* PERSONAL INFORMATION */}
+        <section className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+          <h2 className="mb-5 text-base font-semibold text-heading">
+            Personal information
+          </h2>
 
-          {/* PERSONAL INFORMATION */}
-          <section className="space-y-5">
-            <h2 className="text-lg font-semibold text-heading">
-              Personal information
-            </h2>
-
-            <div>
-              <label
-                htmlFor="name"
-                className="text-sm font-medium text-heading"
-              >
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div className="space-y-2">
+              <label htmlFor="name" className="text-sm font-medium text-heading">
                 Full name
               </label>
-
               <input
                 id="name"
                 name="name"
                 value={form.name}
                 onChange={handleChange}
                 className={inputClass}
+                placeholder="Enter your full name"
                 required
                 maxLength={100}
               />
             </div>
 
-            <div>
-              <label
-                htmlFor="email"
-                className="text-sm font-medium text-heading"
-              >
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-medium text-heading">
                 Email address
               </label>
-
               <input
                 id="email"
                 type="email"
                 value={form.email}
-                className={`${inputClass} cursor-not-allowed opacity-70`}
+                className={`${inputClass} cursor-not-allowed opacity-60`}
                 disabled
               />
-
-              <p className="mt-1 text-xs text-muted">
+              <p className="text-xs text-muted">
                 Email changes are disabled here.
               </p>
             </div>
 
-            <div>
-              <label
-                htmlFor="phone"
-                className="text-sm font-medium text-heading"
-              >
+            <div className="space-y-2 sm:col-span-2">
+              <label htmlFor="phone" className="text-sm font-medium text-heading">
                 Phone number
               </label>
-
               <input
                 id="phone"
                 name="phone"
@@ -452,75 +429,62 @@ function Profile() {
                 maxLength={30}
               />
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* THERAPIST INFORMATION */}
-          {isTherapist && (
-            <>
-              <div className="h-px bg-border" />
+        {/* THERAPIST INFORMATION */}
+        {isTherapist && (
+          <section className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+            <h2 className="mb-1 text-base font-semibold text-heading">
+              Professional information
+            </h2>
+            <p className="mb-5 text-sm text-muted">
+              Help clients learn more about your experience and services.
+            </p>
 
-              <section className="space-y-5">
-                <div>
-                  <h2 className="text-lg font-semibold text-heading">
-                    Professional information
-                  </h2>
+            <div className="space-y-5">
+              <div className="space-y-2">
+                <label htmlFor="bio" className="text-sm font-medium text-heading">
+                  Professional bio
+                </label>
+                <textarea
+                  id="bio"
+                  name="bio"
+                  value={form.bio}
+                  onChange={handleChange}
+                  className={`${inputClass} min-h-32 resize-y`}
+                  placeholder="Introduce yourself and describe your approach to therapy..."
+                  maxLength={1000}
+                  required
+                />
+                <p className="text-right text-xs text-muted">
+                  {form.bio.length}/1000 characters
+                </p>
+              </div>
 
-                  <p className="mt-1 text-sm text-muted">
-                    Help clients understand your experience and services.
-                  </p>
-                </div>
+              <div className="space-y-2">
+                <label htmlFor="specialties" className="text-sm font-medium text-heading">
+                  Specialties
+                </label>
+                <input
+                  id="specialties"
+                  name="specialties"
+                  value={form.specialties}
+                  onChange={handleChange}
+                  className={inputClass}
+                  placeholder="Anxiety, stress, relationships"
+                  required
+                />
+                <p className="text-xs text-muted">
+                  Separate specialties with commas.
+                </p>
+              </div>
 
-                <div>
-                  <label
-                    htmlFor="bio"
-                    className="text-sm font-medium text-heading"
-                  >
-                    Professional bio
-                  </label>
-
-                  <textarea
-                    id="bio"
-                    name="bio"
-                    value={form.bio}
-                    onChange={handleChange}
-                    className={`${inputClass} min-h-32 resize-y`}
-                    placeholder="Introduce yourself and describe your approach to therapy..."
-                    maxLength={1000}
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="specialties"
-                    className="text-sm font-medium text-heading"
-                  >
-                    Specialties
-                  </label>
-
-                  <input
-                    id="specialties"
-                    name="specialties"
-                    value={form.specialties}
-                    onChange={handleChange}
-                    className={inputClass}
-                    placeholder="Anxiety, stress, relationships"
-                    required
-                  />
-
-                  <p className="mt-1 text-xs text-muted">
-                    Separate specialties with commas.
-                  </p>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="yearsOfExperience"
-                    className="text-sm font-medium text-heading"
-                  >
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label htmlFor="yearsOfExperience" className="text-sm font-medium text-heading">
                     Years of experience
                   </label>
-
                   <input
                     id="yearsOfExperience"
                     name="yearsOfExperience"
@@ -535,14 +499,10 @@ function Profile() {
                   />
                 </div>
 
-                <div>
-                  <label
-                    htmlFor="languages"
-                    className="text-sm font-medium text-heading"
-                  >
+                <div className="space-y-2">
+                  <label htmlFor="languages" className="text-sm font-medium text-heading">
                     Languages
                   </label>
-
                   <input
                     id="languages"
                     name="languages"
@@ -551,20 +511,15 @@ function Profile() {
                     className={inputClass}
                     placeholder="Arabic, English, French"
                   />
-
-                  <p className="mt-1 text-xs text-muted">
+                  <p className="text-xs text-muted">
                     Separate languages with commas.
                   </p>
                 </div>
 
-                <div>
-                  <label
-                    htmlFor="sessionPrice"
-                    className="text-sm font-medium text-heading"
-                  >
+                <div className="space-y-2">
+                  <label htmlFor="sessionPrice" className="text-sm font-medium text-heading">
                     Session price ($)
                   </label>
-
                   <input
                     id="sessionPrice"
                     name="sessionPrice"
@@ -578,14 +533,10 @@ function Profile() {
                   />
                 </div>
 
-                <div>
-                  <label
-                    htmlFor="sessionType"
-                    className="text-sm font-medium text-heading"
-                  >
+                <div className="space-y-2">
+                  <label htmlFor="sessionType" className="text-sm font-medium text-heading">
                     Session type
                   </label>
-
                   <select
                     id="sessionType"
                     name="sessionType"
@@ -599,14 +550,10 @@ function Profile() {
                   </select>
                 </div>
 
-                <div>
-                  <label
-                    htmlFor="location"
-                    className="text-sm font-medium text-heading"
-                  >
+                <div className="space-y-2 sm:col-span-2">
+                  <label htmlFor="location" className="text-sm font-medium text-heading">
                     Location
                   </label>
-
                   <input
                     id="location"
                     name="location"
@@ -616,43 +563,46 @@ function Profile() {
                     placeholder="e.g. Nabatieh, Lebanon"
                   />
                 </div>
-              </section>
-            </>
-          )}
+              </div>
+            </div>
+          </section>
+        )}
 
-          {/* FEEDBACK */}
-          {error && (
-            <p
-              role="alert"
-              className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700"
-            >
-              {error}
-            </p>
-          )}
+        {/* FEEDBACK */}
+        {error && (
+          <p
+            role="alert"
+            className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
+            {error}
+          </p>
+        )}
 
-          {success && (
-            <p
-              role="status"
-              className="rounded-xl bg-green-50 px-4 py-3 text-sm text-green-700"
-            >
-              {success}
-            </p>
-          )}
+        {success && (
+          <p
+            role="status"
+            className="rounded-xl border border-green-100 bg-green-50 px-4 py-3 text-sm text-green-700"
+          >
+            {success}
+          </p>
+        )}
 
-          {/* SAVE BUTTON */}
-          <div className="flex justify-end border-t border-border pt-5">
-            <button
-              type="submit"
-              disabled={saving}
-              className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {saving ? "Saving changes..." : "Save changes"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </main>
-  );
+        {/* SAVE BUTTON */}
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            disabled={saving}
+            className="rounded-xl bg-primary px-6 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {saving ? "Saving changes..." : "Save changes"}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </main>
+);
+
 }
 
 export default Profile;

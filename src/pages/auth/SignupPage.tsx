@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import yellowLineVideo from "../../assets/yellow_line_loop.webm";
 import { useSignup } from "../../hooks/auth/useSignup";
@@ -7,6 +7,7 @@ const inputClass =
   "w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-heading placeholder:text-muted outline-none transition focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10";
 
 function SignupPage() {
+  const location = useLocation();
   const navigate = useNavigate();
   const {
     name,
@@ -20,6 +21,7 @@ function SignupPage() {
     role,
     setRole,
     error,
+    success,
     errors,
     setErrors,
     loading,
@@ -67,6 +69,16 @@ function SignupPage() {
               role="alert"
             >
               {error}
+            </div>
+          )}
+
+          {/* SUCCESS MESSAGE */}
+          {success && (
+            <div
+              className="mb-4 rounded-xl bg-green-50 border border-green-100 px-4 py-3 text-sm text-green-700"
+              role="status"
+            >
+              {success}
             </div>
           )}
 

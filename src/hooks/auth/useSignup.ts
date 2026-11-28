@@ -1,15 +1,17 @@
 // src/hooks/useSignup.ts
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 export function useSignup() {
+  const location = useLocation();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("client");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
@@ -67,12 +69,20 @@ export function useSignup() {
     setLoading(true);
 
     try {
-      await signup(name.trim(), email.trim(), password, role);
-      navigate("/");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
-      setLoading(false);
-    }
+  await signup(
+    name.trim(),
+    email.trim(),
+    password,
+    role,
+    location.state?.from || "/",
+  );
+
+  setSuccess("Account created! Please check your email to verify your account.");
+} catch (err) {
+  setError(err instanceof Error ? err.message : "Something went wrong");
+} finally {
+  setLoading(false);
+}
   }
 
   return {
@@ -87,6 +97,7 @@ export function useSignup() {
     role,
     setRole,
     error,
+    success,
     errors,
     setErrors,
     loading,

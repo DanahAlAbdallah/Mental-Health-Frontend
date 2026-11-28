@@ -30,7 +30,9 @@ interface AuthContextType {
     email: string,
     password: string,
     role: string,
+    returnTo: string,
   ) => Promise<void>;
+  verifyEmail: (token: string) => Promise<void>;
   logout: () => void;
   updateUser: (user: User) => void;
 }
@@ -98,11 +100,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     email: string,
     password: string,
     role: string,
+    returnTo: string,
   ) {
     const data = await apiRequest<AuthResponse>("/auth/signup", {
       method: "POST",
-      body: JSON.stringify({ name, email, password, role }),
+      body: JSON.stringify({ name, email, password, role, returnTo }),
     });
+    saveSession(data);
+  }
+
+  // VERIFY EMAIL AND AUTOMATICALLY LOG IN
+  async function verifyEmail(token: string) {
+    const data = await apiRequest<AuthResponse>("/auth/verify-email", {
+      method: "POST",
+      body: JSON.stringify({ token }),
+    });
+
     saveSession(data);
   }
 
@@ -115,8 +128,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isAuthenticated: user !== null,
       login,
       signup,
+      verifyEmail,
       logout,
-      updateUser
+      updateUser,
     }),
     [user, token, logout, updateUser],
   );

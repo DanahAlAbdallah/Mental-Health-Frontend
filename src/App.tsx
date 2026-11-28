@@ -15,7 +15,6 @@ import MyAvailability from "./pages/dashboard/MyAvailability";
 import MySessions from "./pages/dashboard/MySessions";
 import ArticleForm from "./pages/dashboard/ArticleForm";
 
-
 import ClientRoute from "./components/ClientRoute";
 import MyBookings from "./pages/MyBookings";
 import RequireAuth from "./components/RequireAuth";
@@ -25,6 +24,7 @@ import SessionDetails from "./pages/sessions/SessionDetails";
 import ArticleDetailPage from "./pages/articles/ArticleDetailPage";
 import ArticlesPage from "./pages/articles/ArticlesPage";
 import LandingPage from "./pages/landing/LandingPage";
+import VerifyEmail from "./pages/auth/VerifyEmail";
 
 function App() {
   const location = useLocation();
@@ -45,6 +45,9 @@ function App() {
 
         {/* SIGNUP */}
         <Route path="/signup" element={<SignupPage />} />
+
+        {/* VERIFY EMAIL */}
+        <Route path="/verify-email" element={<VerifyEmail />} />
 
         {/* FORGET PASSWORD */}
         <Route path="/forgot-password" element={<ForgotPassword />} />

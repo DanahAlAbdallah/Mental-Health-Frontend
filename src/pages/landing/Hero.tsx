@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import yellowLineVideo from "../../assets/yellow_line_loop.webm";
+import { useAuth } from "../../context/AuthContext";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -33,7 +34,7 @@ function Word({ text, className = "" }: { text: string; className?: string }) {
 function Hero() {
   const root = useRef<HTMLElement>(null);
   const videoLayer = useRef<HTMLDivElement>(null);
-
+  const { user } = useAuth();
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
@@ -80,7 +81,11 @@ function Hero() {
             },
             "-=0.5",
           )
-          .from("[data-hero='cue']", { opacity: 0, y: -10, duration: 0.6 }, "-=0.3");
+          .from(
+            "[data-hero='cue']",
+            { opacity: 0, y: -10, duration: 0.6 },
+            "-=0.3",
+          );
 
         // THE SCROLL CUE BOUNCES
         gsap.to("[data-hero='cue-arrow']", {
@@ -122,8 +127,14 @@ function Hero() {
           const layer = videoLayer.current;
           if (!section || !layer) return;
 
-          const moveX = gsap.quickTo(layer, "x", { duration: 1.2, ease: "power3" });
-          const moveY = gsap.quickTo(layer, "y", { duration: 1.2, ease: "power3" });
+          const moveX = gsap.quickTo(layer, "x", {
+            duration: 1.2,
+            ease: "power3",
+          });
+          const moveY = gsap.quickTo(layer, "y", {
+            duration: 1.2,
+            ease: "power3",
+          });
 
           function onMove(e: MouseEvent) {
             moveX((e.clientX / window.innerWidth - 0.5) * -40);
@@ -188,7 +199,10 @@ function Hero() {
               <Word text="to" className="mr-[0.22em]" />
               {/* THE WORD "NOT" GETS A YELLOW MARKER THAT DRAWS ITSELF */}
               <span className="relative mr-[0.22em] inline-block">
-                <Word text="not" className="text-white relative z-10 text-heading" />
+                <Word
+                  text="not"
+                  className="text-white relative z-10 text-heading"
+                />
                 <span
                   data-hero="marker"
                   className="absolute -inset-x-[0.06em] bottom-[0.1em] z-0 h-[0.4em] rounded-full bg-accent"
@@ -206,7 +220,8 @@ function Hero() {
 
           <div data-hero="fade" className="flex flex-wrap items-center gap-6">
             <Link
-              to="/therapists"
+              to={user ? "/therapists" : "/login"}
+              state={{ from: "/therapists" }}
               className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 font-semibold text-heading shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
             >
               Book your session
@@ -223,7 +238,10 @@ function Hero() {
 
           <ul data-hero="fade" className="mt-10 flex flex-wrap gap-x-6 gap-y-2">
             {highlights.map((item) => (
-              <li key={item} className="flex items-center gap-2 text-sm opacity-90">
+              <li
+                key={item}
+                className="flex items-center gap-2 text-sm opacity-90"
+              >
                 <span className="h-1.5 w-1.5 rounded-full bg-accent" />
                 {item}
               </li>
@@ -238,7 +256,10 @@ function Hero() {
         type="button"
         aria-label="Scroll down"
         onClick={() =>
-          window.scrollBy({ top: window.innerHeight * 0.85, behavior: "smooth" })
+          window.scrollBy({
+            top: window.innerHeight * 0.85,
+            behavior: "smooth",
+          })
         }
         className="absolute bottom-6 left-1/2 hidden h-11 w-11 -translate-x-1/2 cursor-pointer items-center justify-center rounded-full border border-button-text/30 bg-button-text/10 backdrop-blur transition-colors hover:border-accent hover:bg-accent hover:text-heading md:flex"
       >

@@ -1,6 +1,6 @@
 // src/hooks/useLogin.ts
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 export function useLogin() {
@@ -11,6 +11,7 @@ export function useLogin() {
 
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -19,7 +20,10 @@ export function useLogin() {
 
     try {
       await login(email, password);
-      navigate("/");
+     const returnTo =
+  location.state?.from === "/therapists" ? "/therapists" : "/";
+
+navigate(returnTo, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 import yellowLineVideo from "../../assets/yellow_line_loop.webm";
@@ -8,6 +8,7 @@ const inputClass =
   "w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-heading placeholder:text-muted outline-none transition focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10";
 
 function LoginPage() {
+  const location = useLocation();
   const navigate = useNavigate();
   const {
     email,
@@ -137,7 +138,7 @@ function LoginPage() {
             Don't have an account?{" "}
             <button
               type="button"
-              onClick={() => navigate("/signup")}
+             onClick={() => navigate("/signup", { state: location.state })}
               className="font-semibold text-heading hover:text-primary-hover transition cursor-pointer"
             >
               Create one

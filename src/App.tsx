@@ -25,12 +25,13 @@ import ArticleDetailPage from "./pages/articles/ArticleDetailPage";
 import ArticlesPage from "./pages/articles/ArticlesPage";
 import LandingPage from "./pages/landing/LandingPage";
 import VerifyEmail from "./pages/auth/VerifyEmail";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
   const location = useLocation();
-
+const { user } = useAuth();
   const showNavbar =
-    location.pathname !== "/login" && location.pathname !== "/signup";
+    location.pathname !== "/login" && location.pathname !== "/signup" &&   user?.role !== "therapist";;
 
   return (
     <>

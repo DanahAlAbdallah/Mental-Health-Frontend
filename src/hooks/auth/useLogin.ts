@@ -19,11 +19,16 @@ export function useLogin() {
     setLoading(true);
 
     try {
-      await login(email, password);
-     const returnTo =
-  location.state?.from === "/therapists" ? "/therapists" : "/";
+      const loggedInUser = await login(email, password);
 
-navigate(returnTo, { replace: true });
+      if (loggedInUser.role === "therapist") {
+        navigate("/dashboard", { replace: true });
+      } else {
+        const returnTo =
+          location.state?.from === "/therapists" ? "/therapists" : "/";
+
+        navigate(returnTo, { replace: true });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {

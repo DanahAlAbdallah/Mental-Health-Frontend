@@ -4,6 +4,9 @@ import {
   FileText,
   CalendarDays,
   CalendarClock,
+  BookOpen,
+  Users,
+  UserRound,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -24,3 +27,14 @@ export const dashboardLinks: DashboardLink[] = [
     icon: CalendarClock,
   },
 ];
+
+export const exploreLinks: DashboardLink[] = [
+  { to: "/articles", label: "Browse articles", icon: BookOpen },
+  { to: "/therapists", label: "Find therapists", icon: Users },
+];
+
+export const generalLinks: DashboardLink[] = [
+  { to: "/profile", label: "My profile", icon: UserRound },
+];
+
+

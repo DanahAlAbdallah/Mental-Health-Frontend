@@ -24,7 +24,7 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
   signup: (
     name: string,
     email: string,
@@ -86,14 +86,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [logout]);
 
   // LOG IN WITH EMAIL AND PASSWORD AND SAVE THE SESSION
-  async function login(email: string, password: string) {
-    const data = await apiRequest<AuthResponse>("/auth/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    });
-    saveSession(data);
-  }
+// LOG IN WITH EMAIL AND PASSWORD AND SAVE THE SESSION
+async function login(email: string, password: string): Promise<User> {
+  const data = await apiRequest<AuthResponse>("/auth/login", {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+  });
 
+  saveSession(data);
+
+  return data.user;
+}
   // CREATE A NEW ACCOUNT AND SAVE THE SESSION
   async function signup(
     name: string,
